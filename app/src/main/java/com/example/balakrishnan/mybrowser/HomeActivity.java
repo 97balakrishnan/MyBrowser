@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -97,5 +98,21 @@ public class HomeActivity extends AppCompatActivity {
         final int color = newBitmap.getPixel(0, 0);
         newBitmap.recycle();
         return color;
+    }
+
+    //To show keyboard
+    public void showSoftKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        view.requestFocus();
+        inputMethodManager.showSoftInput(view, 0);
+    }
+
+    //To  hide keyboard
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
     }
 }

@@ -13,6 +13,18 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:id="@+id/backgroundIV"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:layout_alignParentBottom="true"
+            android:textSize="12sp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_corners1"
+            android:text="Photos by Unsplash"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
