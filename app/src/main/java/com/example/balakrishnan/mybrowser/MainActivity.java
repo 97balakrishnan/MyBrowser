@@ -56,148 +56,70 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    int backFlag=0;
+
     public static SwipeRefreshLayout mySwipeRefreshLayout;
-    TextView txt;
-    ImageView imageView;
-    WebView wv;
-    BitmapDrawable drawable;
-    AutoCompleteTextView et;
-    boolean isOpen = false, isOpen1 = false;
-    boolean fl;
+    public static ArrayList<String> hist = new ArrayList<>();
+    public static ArrayAdapter<String> adapter;
+
+    private TextView t, w;
+    private TextView tAbout;
+    private TextView tDownloadAll;
+
+    private ImageView imageView;
+    private WebView wv;
+    private EditText et;
+    private DigitalClock clock;
+
+    private boolean isOpenGo = false;
+    private boolean isOpenMore = false;
+    private boolean fl;
+    private int backFlag=0;
+    private boolean isFirstLoad=true;
+    
     Animation FabOpen, FabClose, FabRC, FabRAC;
     Animation FabOpen1, FabClose1, FabRC1, FabRAC1;
-    TextView t, w;
-    ArrayList<String> al;
-    public static ArrayList<String> hist = new ArrayList<>();
 
-    public static ArrayAdapter<String> adapter;
-    String[] WEBSITES = {"http://facebook.com","http://twitter.com","http://youtube.com","http://hotstar.com","http://www.ssn.net","http://flipkart.com","http://amazon.in","http://www.google.com"};
-    String[] WEBSITES1 = {"http://facebook.com","http://twitter.com","http://youtube.com","http://hotstar.com","http://www.ssn.net","http://flipkart.com","http://amazon.in","http://www.google.com"};
+    FloatingActionButton fab_go, fab_refresh, fab_forward, fab_back, fab_more;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
-
-        txt=(TextView)findViewById(R.id.txt);
-        mySwipeRefreshLayout = (SwipeRefreshLayout)this.findViewById(R.id.swipeContainer);
-        mySwipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        wv.reload();
-
-                        mySwipeRefreshLayout.setRefreshing(false);
-                    }
-                }
-        );
-
-/*
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, WEBSITES);
-        AutoCompleteTextView textView = (AutoCompleteTextView)findViewById(R.id.editText2);
-        textView.setAdapter(adapter);
-*/
-    //new BackgroundTask().execute(getApplicationContext());
-        BackgroundTask.cont=getApplicationContext();
-
-        final FloatingActionButton fab_option, fab_refresh, fab_forward, fab_back, fab_more;
-        fab_option = (FloatingActionButton) findViewById(R.id.fab_option);
-        fab_refresh = (FloatingActionButton) findViewById(R.id.fab_refresh);
-        fab_forward = (FloatingActionButton) findViewById(R.id.fab_forward);
-        fab_back = (FloatingActionButton) findViewById(R.id.fab_back);
-        fab_more = (FloatingActionButton) findViewById(R.id.fab_more);
-        //fab_option.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55000000")));
+    public void initFabs()
+    {
+        fab_go = findViewById(R.id.fab_go);
+        fab_refresh = findViewById(R.id.fab_refresh);
+        fab_forward = findViewById(R.id.fab_forward);
+        fab_back = findViewById(R.id.fab_back);
+        fab_more = findViewById(R.id.fab_more);
 
 
+        tAbout = findViewById(R.id.about);
+        tDownloadAll = findViewById(R.id.download_all);
+
+    }
+    public void initAnimations()
+    {
         FabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         FabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         FabRC = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
         FabRAC = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
 
-        fab_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                txt.setBackgroundColor(Color.parseColor("#77000000"));
-                mySwipeRefreshLayout.bringToFront();
-                mySwipeRefreshLayout.invalidate();
-                    wv.bringToFront();
-                    wv.invalidate();
-                    t.setVisibility(View.INVISIBLE);
-                    w.setVisibility(View.INVISIBLE);
-
-                    String url=et.getText().toString().trim();
-                    if(url.length()==0)
-                        Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
-                    else if(url.contains("http://")||url.contains("https://"))
-                        wv.loadUrl(url);
-                    else if(url.contains("."))
-                        wv.loadUrl("http://"+url);
-                    else
-                        wv.loadUrl("http://google.com/search?q="+url);
-                    hideSoftKeyboard();
-                    et.setSelectAllOnFocus(true);
-
-
-
-
-            }
-        });
-        fab_option.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (isOpen) {
-                    fab_back.startAnimation(FabClose);
-                    fab_forward.startAnimation(FabClose);
-                    fab_refresh.startAnimation(FabClose);
-                    fab_option.startAnimation(FabRAC);
-                    fab_back.setClickable(false);
-                    fab_forward.setClickable(false);
-                    fab_refresh.setClickable(false);
-                    isOpen = false;
-                } else if (isOpen == false) {
-                    fab_back.startAnimation(FabOpen);
-                    fab_forward.startAnimation(FabOpen);
-                    fab_refresh.startAnimation(FabOpen);
-                    fab_option.startAnimation(FabRC);
-                    fab_back.setClickable(true);
-                    fab_forward.setClickable(true);
-                    fab_refresh.setClickable(true);
-                    isOpen = true;
-                }
-                return true;
-            }
-        });
-        final TextView about = (TextView) findViewById(R.id.about);
-        final TextView clear = (TextView) findViewById(R.id.clear);
         FabOpen1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         FabClose1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         FabRC1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
         FabRAC1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
 
-        fab_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isOpen1) {
-                    about.startAnimation(FabClose1);
-                    clear.startAnimation(FabClose1);
-                    fab_more.startAnimation(FabRAC1);
-                    about.setClickable(false);
-                    clear.setClickable(false);
-                    isOpen1 = false;
-                } else if (isOpen1 == false) {
-                    about.startAnimation(FabOpen1);
-                    clear.startAnimation(FabOpen1);
-                    fab_more.startAnimation(FabRC1);
-                    about.setClickable(true);
-                    clear.setClickable(true);
-                    isOpen1 = true;
-                }
-            }
-        });
-
-        fl = false;
+    }
+    public void initSwipeLayout()
+    {
+        mySwipeRefreshLayout = findViewById(R.id.swipeContainer);
+    }
+    public void initHomeScreenElements()
+    {
+        w = findViewById(R.id.welcome);
+        t = findViewById(R.id.clock);
+        imageView =findViewById(R.id.imageView);
+        clock = findViewById(R.id.dclock);
+    }
+    public void initWebView()
+    {
         wv = (WebView) findViewById(R.id.main_web_view);
         WebSettings ws = wv.getSettings();
         ws.setJavaScriptEnabled(true);
@@ -205,24 +127,16 @@ public class MainActivity extends AppCompatActivity {
         wv.getSettings().setLoadWithOverviewMode(true);
         wv.getSettings().setBuiltInZoomControls(true);
         wv.getSettings().setMinimumFontSize(10);
-        //wv.loadUrl("https://source.unsplash.com/random");
-        //wv.loadDataWithBaseURL(null,"<!DOCTYPE html><html><body style = \"text-align:center\"><img style=\"border-style:solid;border-width:5px;border-color:black;width:99%;\" src= https://source.unsplash.com/random alt=\"page Not Found\"></body></html>","text/html", "UTF-8", null);
-        imageView = (ImageView) findViewById(R.id.imageView);
 
-        Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                System.out.println("greener1");
-                fab_more.setBackgroundColor(getDominantColor(bitmap));
-            }
+        wv.setWebViewClient(new NewWebViewClient());
 
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {}
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {}
-        };
-
+    }
+    public void initURLfield()
+    {
+        et = findViewById(R.id.url_field);
+    }
+    public void loadHomeScreenImage()
+    {
 
         Picasso.with(this)
                 .load("https://source.unsplash.com/random").error(R.drawable.nointernet).into(imageView, new Callback() {
@@ -232,60 +146,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError() {
-                System.out.println("error");
+                Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_LONG).show();
             }
         });
 
+    }
+    public void setClockTime()
+    {
 
-        //imageView.setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
-       // wv.setWebViewClient(new WebViewClient());
-        wv.setWebViewClient(new NewWebViewClient());
-
-        et = (AutoCompleteTextView) findViewById(R.id.editText2);
-
-        et.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                et.setSelectAllOnFocus(true);
-
-            }
-        });
-
-        et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                boolean handled = false;
-                if (i == EditorInfo.IME_ACTION_SEND) {
-                    txt.setBackgroundColor(Color.parseColor("#77000000"));
-                    mySwipeRefreshLayout.bringToFront();
-                    mySwipeRefreshLayout.invalidate();
-                    wv.bringToFront();
-                    wv.invalidate();
-                    t.setVisibility(View.INVISIBLE);
-                    w.setVisibility(View.INVISIBLE);
-                    String url=et.getText().toString().trim();
-                    if(url.length()==0)
-                        Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
-                    else if(url.contains("http://")||url.contains("https://"))
-                    wv.loadUrl(url);
-                    else if(url.contains("."))
-                        wv.loadUrl("http://"+url);
-                    else
-                    wv.loadUrl("http://google.com/search?q="+url);
-                    hideSoftKeyboard();
-                    et.setSelectAllOnFocus(true);
-
-                    handled = true;
-                }
-                return handled;
-            }
-        });
-
-        //imageView.setVisibility(View.INVISIBLE);
-
-        w = (TextView) findViewById(R.id.welcome);
-        t = (TextView) findViewById(R.id.clock);
-        DigitalClock clock = (DigitalClock) findViewById(R.id.dclock);
         clock.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -302,8 +170,166 @@ public class MainActivity extends AppCompatActivity {
                 t.setText(editable.toString());
             }
         });
+    }
+    public void reloadCurrentPage()
+    {
+        wv.reload();
+        mySwipeRefreshLayout.setRefreshing(false);
+    }
+    public void hideHomeScreenElements()
+    {
+        t.setVisibility(View.INVISIBLE);
+        w.setVisibility(View.INVISIBLE);
+        imageView.setVisibility(View.INVISIBLE);
+    }
+    public void loadURL(String url)
+    {
 
-        clear.setOnClickListener(new View.OnClickListener() {
+        if(url.length()==0)                                          //url field left empty
+            Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
+        else if(url.contains("http://")||url.contains("https://"))  //is a valid url
+            wv.loadUrl(url);
+        else if(url.contains("."))                                  //is an url but doesnt start with http or https
+            wv.loadUrl("http://"+url);
+        else                                                        // not an url therefore searched on google
+            wv.loadUrl("http://google.com/search?q="+url);
+        hideSoftKeyboard();
+
+    }
+    public void closeGoOptionsWithAnimation()
+    {
+        fab_back.startAnimation(FabClose);
+        fab_forward.startAnimation(FabClose);
+        fab_refresh.startAnimation(FabClose);
+        fab_go.startAnimation(FabRAC);
+        fab_back.setClickable(false);
+        fab_forward.setClickable(false);
+        fab_refresh.setClickable(false);
+    }
+    public void openGoOptionsWithAnimation()
+    {
+        fab_back.startAnimation(FabOpen);
+        fab_forward.startAnimation(FabOpen);
+        fab_refresh.startAnimation(FabOpen);
+        fab_go.startAnimation(FabRC);
+        fab_back.setClickable(true);
+        fab_forward.setClickable(true);
+        fab_refresh.setClickable(true);
+
+    }
+    public void openMoreOptionsWithAnimation()
+    {
+        tAbout.startAnimation(FabOpen1);
+        tDownloadAll.startAnimation(FabOpen1);
+        fab_more.startAnimation(FabRC1);
+        tAbout.setClickable(true);
+        tDownloadAll.setClickable(true);
+
+    }
+    public void closeMoreOptionsWithAnimation()
+    {
+        tAbout.startAnimation(FabClose1);
+        tDownloadAll.startAnimation(FabClose1);
+        fab_more.startAnimation(FabRAC1);
+        tAbout.setClickable(false);
+        tDownloadAll.setClickable(false);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
+        
+        initFabs();
+        initAnimations();
+        initSwipeLayout();
+        initHomeScreenElements();
+        initWebView();
+        initURLfield();
+
+        setClockTime();
+        loadHomeScreenImage();
+
+        mySwipeRefreshLayout.setOnRefreshListener(                // Pull down to refresh function
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        reloadCurrentPage();
+                    }
+                }
+        );
+        
+        fab_go.setOnClickListener(new View.OnClickListener() {    // OnClick Listener for go button
+            @Override
+            public void onClick(View view) {
+                
+                    if(isFirstLoad) {                             // If first load then hide Home Screen elements
+                        isFirstLoad=false;
+                        hideHomeScreenElements();
+                    }                 
+                    String url=et.getText().toString().trim();    // Loading the URL
+                    loadURL(url);
+
+            }
+        });
+        
+        fab_go.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (!isOpenGo) {
+                    openGoOptionsWithAnimation();
+                    isOpenGo = true;
+                } 
+                else {
+                    closeGoOptionsWithAnimation();
+                    isOpenGo =false;
+                }
+                return true;
+            }
+        });
+        
+        
+        fab_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isOpenMore) {
+                    openMoreOptionsWithAnimation();
+                    isOpenMore = true;
+                } else{
+                    closeMoreOptionsWithAnimation();
+                    isOpenMore = false;
+                }
+            }
+        });
+
+        fl = false;
+
+
+
+        et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                boolean handled = false;
+                if (i == EditorInfo.IME_ACTION_SEND) {
+
+                    if(isFirstLoad) {                             // If first load then hide Home Screen elements
+                        isFirstLoad=false;
+                        hideHomeScreenElements();
+                    }
+                    String url=et.getText().toString().trim();    // Loading the URL
+                    loadURL(url);
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
+
+        
+
+        BackgroundTask.cont=getApplicationContext();
+        tDownloadAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new BackgroundTask().execute(et.getText().toString().trim());
@@ -400,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void buttonClick(View v) {
-        AutoCompleteTextView et = (AutoCompleteTextView) findViewById(R.id.editText2);
+        EditText et = findViewById(R.id.editText2);
         String s = et.getText().toString();
         if (fl == false && s.length() == 0) {
 

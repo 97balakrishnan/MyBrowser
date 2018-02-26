@@ -37,12 +37,9 @@
         android:scaleType="centerCrop"
         app:srcCompat="@android:color/background_dark"
         />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/txt"/>
 
-    <AutoCompleteTextView
+
+    <EditText
         android:hint="  Enter URL"
         android:textColorHint="#FFFFFF"
         android:padding="3dp"
@@ -57,12 +54,12 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         android:imeOptions="actionSend"
-        android:id="@+id/editText2"
+        android:id="@+id/url_field"
         android:background="@drawable/rounded_corners"
         />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_option"
+        android:id="@+id/fab_go"
         style="?android:borderlessButtonStyle"
 
         android:layout_width="40dp"
@@ -137,7 +134,7 @@
         android:layout_marginLeft="20dp"
         android:textColor="@color/white"
         android:visibility="invisible"
-        android:id="@+id/clear"
+        android:id="@+id/download_all"
         android:background="#77000000"/>
     <TextView
 
