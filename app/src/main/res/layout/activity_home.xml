@@ -81,6 +81,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="40dp"
                                     android:maxLines="1"
+                                    android:singleLine="true"
                                     android:ellipsize="end"
                                     android:id="@+id/urlET"
                                     android:textColor="@android:color/black"

@@ -1,9 +1,15 @@
 package com.example.balakrishnan.mybrowser;
 
+import android.app.DownloadManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +32,12 @@ import android.widget.Toast;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-public class WebActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+
+public class WebActivity extends AppCompatActivity{
 
 
 
@@ -132,7 +143,7 @@ public class WebActivity extends AppCompatActivity implements PopupMenu.OnMenuIt
             webView.goBack();
         }
         else{
-            
+
             supportFinishAfterTransition();
         }
         //To support reverse transitions when user clicks the device back button
@@ -162,6 +173,14 @@ public class WebActivity extends AppCompatActivity implements PopupMenu.OnMenuIt
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.download_menu, popup.getMenu());
         popup.show();
+        popup.getMenu().getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                new DownloadAsyncTask().execute(urlET.getText().toString().trim());
+                return false;
+            }
+        });
+
     }
 
     public void loadURL(String url){
@@ -178,19 +197,97 @@ public class WebActivity extends AppCompatActivity implements PopupMenu.OnMenuIt
         urlET.setSelectAllOnFocus(true);
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about: {
 
-                return true;
-            }
-            case R.id.downloadALL: {
+    public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
 
-                return true;
+        String urlString;
+
+        @Override
+        protected String doInBackground(String... args) {
+
+            urlString = args[0];
+            DHandler();
+
+            return null;
+        }
+
+        public void downloader(String durl, String name, String ext) {
+
+            String url = durl;
+
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+            request.setDescription("Some description");
+            request.setTitle(name);
+
+            //Min SDK should be greater than Honeycomb SDK
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                request.allowScanningByMediaScanner();
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             }
-            default: {
-                return false;
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name + ext);
+
+
+            //Get download service and enqueue file
+            DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            manager.enqueue(request);
+
+
+        }
+
+        public void DHandler() {
+            try {
+
+                URL url = new URL(urlString);
+                BufferedReader reader = null;
+
+                System.out.println("starting");
+
+                //StringBuilder builder = new StringBuilder();
+
+                try {
+
+                    reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+
+                    for (String line; (line = reader.readLine()) != null; ) {
+
+                        if (line.contains(".pdf") || line.contains(".PDF")) {
+
+                            int locn = -1;
+
+                            locn = (line.contains(".pdf")) ? (line.indexOf(".pdf")) : (line.indexOf(".PDF"));
+
+                            int i = locn;
+
+                            while (line.charAt(i) != '\"' && i >= 0) i--;
+
+                            String fileLink = null;
+
+                            if (i != 0) {
+
+                                fileLink = line.substring(i + 1, locn + 4);
+                                System.out.println(".!." + fileLink);
+                                String name = fileLink.substring(fileLink.lastIndexOf("/") + 1, fileLink.length());
+                                System.out.println("filename:" + name);
+                                downloader(fileLink, name, ".pdf");
+
+                            }
+                        }
+                    }
+
+                } finally {
+                    if (reader != null) try {
+
+                        reader.close();
+
+                    } catch (IOException logOrIgnore) {
+                        logOrIgnore.printStackTrace();
+                    }
+
+                }
+            } catch (Exception e) {
+
+                System.out.println(e.getMessage());
+
             }
         }
     }
