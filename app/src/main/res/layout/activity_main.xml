@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    tools:context="com.example.balakrishnan.mybrowser.MainActivity">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <WebView
+       android:id="@+id/main_web_view"
+       android:layout_height="match_parent"
+       android:layout_width="match_parent"
+
+           android:background="@drawable/rounded_corners"
+       />
+     </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <ImageView
+        android:id="@+id/imageView"
+
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:background="@drawable/rounded_corners"
+
+        android:scaleType="centerCrop"
+        app:srcCompat="@android:color/background_dark"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/txt"/>
+
+    <AutoCompleteTextView
+        android:hint="  Enter URL"
+        android:textColorHint="#FFFFFF"
+        android:padding="3dp"
+        android:layout_width="240dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textUri"
+        android:text=""
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:imeOptions="actionSend"
+        android:id="@+id/editText2"
+        android:background="@drawable/rounded_corners"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_option"
+        style="?android:borderlessButtonStyle"
+
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/send"
+        app:backgroundTint="#000000" />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/fab_option"
+        android:src="@drawable/refresh_button"
+        android:elevation="6dp"
+        android:id="@+id/fab_refresh"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="#000000"
+        android:visibility="invisible"
+        />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/fab_refresh"
+        android:src="@drawable/forward"
+        android:elevation="6dp"
+        android:id="@+id/fab_forward"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="#000000"
+        android:visibility="invisible"
+        />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/fab_forward"
+        android:src="@drawable/back"
+        android:elevation="6dp"
+        android:id="@+id/fab_back"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="#000000"
+        android:visibility="invisible"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_more"
+        android:layout_width="40dp"
+
+
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/dclock"
+
+
+        android:layout_toRightOf="@+id/dclock"
+        android:src="@drawable/menu"
+        app:backgroundTint="#000000" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:textSize="20dp"
+        android:text="* Download All PDFs *"
+        android:textAlignment="center"
+        android:layout_above="@id/fab_more"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        android:id="@+id/clear"
+        android:background="#77000000"/>
+    <TextView
+
+
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:textSize="20dp"
+        android:text="* About *"
+        android:textAlignment="center"
+        android:layout_above="@id/fab_more"
+        android:layout_marginBottom="120dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        android:id="@+id/about"
+        android:background="#77000000"/>
+    <TextView
+        android:background="@drawable/rounded_corners"
+
+        android:layout_width="260dp"
+        android:layout_height="70dp"
+        android:textSize="50sp"
+        android:text="Welcome User"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/clock"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:fontFamily="cursive"
+        android:id="@+id/welcome"/>
+    <TextView
+
+        android:layout_width="260dp"
+        android:layout_height="70dp"
+        android:textSize="50sp"
+        android:text=""
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/white"
+        android:fontFamily="cursive"
+        android:textAlignment="center"
+        android:id="@+id/clock"
+        android:background="@drawable/rounded_corners"
+        />
+    <DigitalClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/dclock"/>
+</RelativeLayout>
