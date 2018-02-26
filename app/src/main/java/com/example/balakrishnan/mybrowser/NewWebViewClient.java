@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.example.balakrishnan.mybrowser.MainActivity.adapter;
 import static com.example.balakrishnan.mybrowser.MainActivity.hist;
-import static com.example.balakrishnan.mybrowser.MainActivity.mySwipeRefreshLayout;
+import static com.example.balakrishnan.mybrowser.WebActivity.swipeRefreshLayout;
 
 /**
  * Created by balakrishnan on 24/11/17.
@@ -33,9 +33,8 @@ public class NewWebViewClient extends WebViewClient {
         //Toast.makeText(wv.getContext(),url,LENGTH_LONG).show();
         System.out.println("greener "+url);
         mainView = wv.getRootView();
-        EditText et = (EditText)mainView.findViewById(R.id.editText2);
+        EditText et = mainView.findViewById(R.id.urlET);
         et.setText(url);
-
 
         if(URLUtil.isValidUrl(url))
         {System.out.println("greener "+url+" is valid");return false;}
@@ -51,13 +50,13 @@ public class NewWebViewClient extends WebViewClient {
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        mySwipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setRefreshing(true);
         super.onPageStarted(view, url, favicon);
     }
 
     @Override
     public void onPageFinished(WebView view, String url) {
-        mySwipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setRefreshing(false);
         super.onPageFinished(view, url);
     }
 
