@@ -100,6 +100,17 @@ public class WebActivity extends AppCompatActivity{
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        
+                        webView.reload();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );
+
     }
 
     public void init(){
