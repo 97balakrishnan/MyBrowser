@@ -74,6 +74,10 @@
         android:layout_height="wrap_content"
 
         android:layout_alignParentRight="true"
+<<<<<<< HEAD
+=======
+        android:layout_above="@id/fab_go"
+>>>>>>> d48e5fba48dd4d4772d375c6229d1e78aa1d0dd9
         android:src="@drawable/refresh_button"
         android:elevation="6dp"
         android:id="@+id/fab_refresh"
