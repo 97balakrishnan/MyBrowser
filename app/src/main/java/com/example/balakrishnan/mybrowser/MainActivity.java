@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
         else if(url.contains("http://")||url.contains("https://"))  //is a valid url
             wv.loadUrl(url);
-        else if(url.contains("."))                                  //is an url but doesnt start with http or https
+        else if(url.contains("."))                                  //is an url but does'nt start with http or https
             wv.loadUrl("http://"+url);
         else                                                        // not an url therefore searched on google
             wv.loadUrl("http://google.com/search?q="+url);
@@ -426,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void buttonClick(View v) {
-        EditText et = findViewById(R.id.editText2);
+        //EditText et = findViewById(R.id.editText2);
         String s = et.getText().toString();
         if (fl == false && s.length() == 0) {
 

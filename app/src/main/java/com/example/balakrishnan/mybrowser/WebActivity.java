@@ -104,7 +104,7 @@ public class WebActivity extends AppCompatActivity{
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        
+
                         webView.reload();
                         swipeRefreshLayout.setRefreshing(false);
                     }
@@ -131,6 +131,7 @@ public class WebActivity extends AppCompatActivity{
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
         webView.getSettings().setMinimumFontSize(10);
         webView.setWebViewClient(new NewWebViewClient());
 
