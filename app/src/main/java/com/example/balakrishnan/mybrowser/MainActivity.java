@@ -1,11 +1,17 @@
 package com.example.balakrishnan.mybrowser;
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.renderscript.ScriptIntrinsicYuvToRGB;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.method.KeyListener;
+import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 
 import android.app.ActionBar;
@@ -36,10 +42,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
 import android.widget.DigitalClock;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,12 +58,20 @@ import com.squareup.picasso.Target;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
+
 public class MainActivity extends AppCompatActivity {
+
+
+
 
     public static SwipeRefreshLayout mySwipeRefreshLayout;
     public static ArrayList<String> hist = new ArrayList<>();
@@ -72,17 +88,22 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isOpenGo = false;
     private boolean isOpenMore = false;
-    private boolean fl;
-    private int backFlag=0;
-    private boolean isFirstLoad=true;
-    
+
+    private int backFlag = 0,duplFlag=1,replFlag=0;
+    private boolean isFirstLoad = true;
+
+
+    public static String dpath;
+    public static Context cont;
+    public ArrayList<String> FileList;
+    public ArrayList<String> DownloadList;
+
     Animation FabOpen, FabClose, FabRC, FabRAC;
     Animation FabOpen1, FabClose1, FabRC1, FabRAC1;
 
     FloatingActionButton fab_go, fab_refresh, fab_forward, fab_back, fab_more;
 
-    public void initFabs()
-    {
+    public void initFabs() {
         fab_go = findViewById(R.id.fab_go);
         fab_refresh = findViewById(R.id.fab_refresh);
         fab_forward = findViewById(R.id.fab_forward);
@@ -94,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
         tDownloadAll = findViewById(R.id.download_all);
 
     }
-    public void initAnimations()
-    {
+
+    public void initAnimations() {
         FabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         FabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         FabRC = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
@@ -107,19 +128,19 @@ public class MainActivity extends AppCompatActivity {
         FabRAC1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
 
     }
-    public void initSwipeLayout()
-    {
+
+    public void initSwipeLayout() {
         mySwipeRefreshLayout = findViewById(R.id.swipeContainer);
     }
-    public void initHomeScreenElements()
-    {
+
+    public void initHomeScreenElements() {
         w = findViewById(R.id.welcome);
         t = findViewById(R.id.clock);
-        imageView =findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView);
         clock = findViewById(R.id.dclock);
     }
-    public void initWebView()
-    {
+
+    public void initWebView() {
         wv = (WebView) findViewById(R.id.main_web_view);
         WebSettings ws = wv.getSettings();
         ws.setJavaScriptEnabled(true);
@@ -131,28 +152,29 @@ public class MainActivity extends AppCompatActivity {
         wv.setWebViewClient(new NewWebViewClient());
 
     }
-    public void initURLfield()
-    {
+
+    public void initURLfield() {
         et = findViewById(R.id.url_field);
     }
-    public void loadHomeScreenImage()
-    {
+
+    public void loadHomeScreenImage() {
 
         Picasso.with(this)
                 .load("https://source.unsplash.com/random").error(R.drawable.nointernet).into(imageView, new Callback() {
-            @Override public void onSuccess() {
+            @Override
+            public void onSuccess() {
                 imageView.getDrawable();
             }
 
             @Override
             public void onError() {
-                Toast.makeText(getApplicationContext(),"No Internet Connection",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
             }
         });
 
     }
-    public void setClockTime()
-    {
+
+    public void setClockTime() {
 
         clock.addTextChangedListener(new TextWatcher() {
             @Override
@@ -171,33 +193,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void reloadCurrentPage()
-    {
+
+    public void reloadCurrentPage() {
         wv.reload();
         mySwipeRefreshLayout.setRefreshing(false);
     }
-    public void hideHomeScreenElements()
-    {
+
+    public void hideHomeScreenElements() {
         t.setVisibility(View.INVISIBLE);
         w.setVisibility(View.INVISIBLE);
         imageView.setVisibility(View.INVISIBLE);
     }
-    public void loadURL(String url)
-    {
 
-        if(url.length()==0)                                          //url field left empty
-            Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
-        else if(url.contains("http://")||url.contains("https://"))  //is a valid url
+    public void loadURL(String url) {
+
+        if (url.length() == 0)                                          //url field left empty
+            Toast.makeText(getApplicationContext(), "Please Enter URL", Toast.LENGTH_SHORT).show();
+        else if (url.contains("http://") || url.contains("https://"))  //is a valid url
             wv.loadUrl(url);
-        else if(url.contains("."))                                  //is an url but doesnt start with http or https
-            wv.loadUrl("http://"+url);
+        else if (url.contains("."))                                  //is an url but doesnt start with http or https
+            wv.loadUrl("http://" + url);
         else                                                        // not an url therefore searched on google
-            wv.loadUrl("http://google.com/search?q="+url);
+            wv.loadUrl("http://google.com/search?q=" + url);
         hideSoftKeyboard();
 
     }
-    public void closeGoOptionsWithAnimation()
-    {
+
+    public void closeGoOptionsWithAnimation() {
         fab_back.startAnimation(FabClose);
         fab_forward.startAnimation(FabClose);
         fab_refresh.startAnimation(FabClose);
@@ -206,8 +228,8 @@ public class MainActivity extends AppCompatActivity {
         fab_forward.setClickable(false);
         fab_refresh.setClickable(false);
     }
-    public void openGoOptionsWithAnimation()
-    {
+
+    public void openGoOptionsWithAnimation() {
         fab_back.startAnimation(FabOpen);
         fab_forward.startAnimation(FabOpen);
         fab_refresh.startAnimation(FabOpen);
@@ -217,8 +239,8 @@ public class MainActivity extends AppCompatActivity {
         fab_refresh.setClickable(true);
 
     }
-    public void openMoreOptionsWithAnimation()
-    {
+
+    public void openMoreOptionsWithAnimation() {
         tAbout.startAnimation(FabOpen1);
         tDownloadAll.startAnimation(FabOpen1);
         fab_more.startAnimation(FabRC1);
@@ -226,31 +248,41 @@ public class MainActivity extends AppCompatActivity {
         tDownloadAll.setClickable(true);
 
     }
-    public void closeMoreOptionsWithAnimation()
-    {
+
+    public void closeMoreOptionsWithAnimation() {
         tAbout.startAnimation(FabClose1);
         tDownloadAll.startAnimation(FabClose1);
         fab_more.startAnimation(FabRAC1);
         tAbout.setClickable(false);
         tDownloadAll.setClickable(false);
     }
+    public void initElements()
+    {
+        backFlag = 0;duplFlag=1;replFlag=0;
+        DownloadList = new ArrayList<>();
 
+        dpath="/Download";
+        cont = this.getApplicationContext();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-        
+
         initFabs();
         initAnimations();
         initSwipeLayout();
+
+        isStoragePermissionGranted();
         initHomeScreenElements();
         initWebView();
         initURLfield();
-
+        initElements();
         setClockTime();
         loadHomeScreenImage();
-
+        FileListFunction();
         mySwipeRefreshLayout.setOnRefreshListener(                // Pull down to refresh function
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -259,51 +291,54 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-        
+
         fab_go.setOnClickListener(new View.OnClickListener() {    // OnClick Listener for go button
             @Override
             public void onClick(View view) {
-                
-                    if(isFirstLoad) {                             // If first load then hide Home Screen elements
-                        isFirstLoad=false;
-                        hideHomeScreenElements();
-                    }                 
-                    String url=et.getText().toString().trim();    // Loading the URL
-                    loadURL(url);
+
+                if (isFirstLoad) {                             // If first load then hide Home Screen elements
+                    isFirstLoad = false;
+                    hideHomeScreenElements();
+                }
+                String url = et.getText().toString().trim();    // Loading the URL
+                loadURL(url);
 
             }
         });
-        
+
         fab_go.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 if (!isOpenGo) {
                     openGoOptionsWithAnimation();
                     isOpenGo = true;
-                } 
-                else {
+                } else {
                     closeGoOptionsWithAnimation();
-                    isOpenGo =false;
+                    isOpenGo = false;
                 }
                 return true;
             }
         });
-        
-        
+
+        tAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"App made by S Balakrishnan ",Toast.LENGTH_SHORT).show();
+            }
+        });
+
         fab_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!isOpenMore) {
                     openMoreOptionsWithAnimation();
                     isOpenMore = true;
-                } else{
+                } else {
                     closeMoreOptionsWithAnimation();
                     isOpenMore = false;
                 }
             }
         });
-
-        fl = false;
 
 
 
@@ -313,11 +348,11 @@ public class MainActivity extends AppCompatActivity {
                 boolean handled = false;
                 if (i == EditorInfo.IME_ACTION_SEND) {
 
-                    if(isFirstLoad) {                             // If first load then hide Home Screen elements
-                        isFirstLoad=false;
+                    if (isFirstLoad) {                             // If first load then hide Home Screen elements
+                        isFirstLoad = false;
                         hideHomeScreenElements();
                     }
-                    String url=et.getText().toString().trim();    // Loading the URL
+                    String url = et.getText().toString().trim();    // Loading the URL
                     loadURL(url);
                     handled = true;
                 }
@@ -326,13 +361,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        
-
-        BackgroundTask.cont=getApplicationContext();
         tDownloadAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new BackgroundTask().execute(et.getText().toString().trim());
+                if(isStoragePermissionGranted()) {
+                    alertBoxWindow();
+
+                }
+
             }
         });
         fab_back.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
         fab_forward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(wv.canGoForward())
+                if (wv.canGoForward())
                     wv.goForward();
             }
         });
@@ -355,55 +391,7 @@ public class MainActivity extends AppCompatActivity {
                 wv.reload();
             }
         });
-        /*et.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSoftKeyboard(view);
-                if(!et.getText().toString().equals("http://"))
-                et.setSelectAllOnFocus(true);
-                ArrayList<String> al = new ArrayList<String>();
-                for(int x=0;x<WEBSITES1.length;x++)
-                {
-                    if(WEBSITES1[x].contains(et.getText().toString().trim()))
-                    {
-                        al.add(WEBSITES1[x]);
-                    }
-                }
-                WEBSITES = al.toArray(new String[0]);
-                adapter.notifyDataSetChanged();
-                et.showDropDown();
-            }
-        });
 
-
-      et.addTextChangedListener(new TextWatcher() {
-          @Override
-          public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-          }
-
-          @Override
-          public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-          }
-
-          @Override
-          public void afterTextChanged(Editable editable) {
-
-              ArrayList<String> al = new ArrayList<String>();
-              for(int x=0;x<WEBSITES1.length;x++)
-              {
-                  if(WEBSITES1[x].contains(et.getText().toString().trim()))
-                  {
-                      al.add(WEBSITES1[x]);
-                  }
-              }
-              WEBSITES = al.toArray(new String[0]);
-              adapter.notifyDataSetChanged();
-              et.showDropDown();
-          }
-      });
-*/
     }
 
     @Override
@@ -411,45 +399,26 @@ public class MainActivity extends AppCompatActivity {
 
         //super.onBackPressed();
 
-        if (wv.canGoBack())
-        { wv.goBack();
-            backFlag=0;}
-        else if(backFlag==0)
-        {
-            Toast.makeText(getApplicationContext(),"Press back again to exit",Toast.LENGTH_SHORT).show();
-            backFlag=1;
-        }
-        else
-        {
+        if (wv.canGoBack()) {
+            wv.goBack();
+            backFlag = 0;
+        } else if (backFlag == 0) {
+            Toast.makeText(getApplicationContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+            backFlag = 1;
+        } else {
             this.onDestroy();
         }
     }
 
-    public void buttonClick(View v) {
-        EditText et = findViewById(R.id.editText2);
-        String s = et.getText().toString();
-        if (fl == false && s.length() == 0) {
 
-            Picasso.with(this).load("https://source.unsplash.com/random").skipMemoryCache().error(R.drawable.nointernet).into(imageView);
-            //imageView.setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
-        } else if (s.length() != 0) {
-            fl = true;
-            WebView wv = (WebView) findViewById(R.id.main_web_view);
-            imageView.setVisibility(View.INVISIBLE);
-            t.setVisibility(View.INVISIBLE);
-            w.setVisibility(View.INVISIBLE);
-            wv.loadUrl(s);
-
-        }
-
-        }
     public void showSoftKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         view.requestFocus();
         inputMethodManager.showSoftInput(view, 0);
     }
+
     public void hideSoftKeyboard() {
-        if(getCurrentFocus()!=null) {
+        if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
@@ -457,93 +426,123 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static int getDominantColor(Bitmap bitmap) {
+    public static String exts = ".pdf .ppt .pptx .PDF .doc .docx";
+    private EditText vDpath;
+    private EditText edt;
+    Switch cb;
+    Switch cb2;
+    public void alertBoxWindow()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_layout, null);
+        dialogBuilder.setView(dialogView);
 
-        Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true);
-        final int color = newBitmap.getPixel(0, 0);
-        newBitmap.recycle();
-        System.out.println("greener2"+color);
-        return color;
+        edt   = dialogView.findViewById(R.id.edit1);
+        vDpath= dialogView.findViewById(R.id.edit2);
+
+         cb =dialogView.findViewById(R.id.checkBox);
+         cb2=dialogView.findViewById(R.id.checkBox2);
+
+        cb.setChecked(true);
+        cb2.setChecked(false);
+
+
+        edt.setText(exts);
+        dialogBuilder.setTitle("DownloadAll Menu");
+
+        vDpath.setText(dpath);
+        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                duplFlag=(cb.isChecked())?1:0;
+                replFlag=(cb2.isChecked())?1:0;
+                dpath=vDpath.getText().toString();
+                CreateDir(dpath);
+
+                exts=edt.getText().toString().trim();
+
+                new BackgroundParseTask().execute(et.getText().toString().trim(),exts);
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
     }
 
+    public void CreateDir(String s)
+    {
+        File dir = new File(s);
+        if(dir.exists())
+        {
+            System.out.println("Directory "+s+" exists");
+        }
+        else {
+            try {
+                if (dir.mkdir()) {
+                    System.out.println("Directory created");
+                } else {
+                    System.out.println("Directory is not created");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        dpath=dir.getPath();
+    }
+
+    public void FileListFunction()
+    {
+
+        FileList=new ArrayList<>();
+        FileList.clear();
+
+        File f = Environment.getExternalStoragePublicDirectory(dpath);
+        if(f.listFiles()==null)
+            return;
+        System.out.println(dpath);
+        File[] g = f.listFiles();
+
+        for(File x:g)
+        {
+            String fname=x.getAbsoluteFile().getName();
+            if(!FileList.contains(fname))
+                FileList.add(fname);
+
+        }
+        try {
+            Class.forName("android.os.AsyncTask");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+     }
 
 
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Permission is granted");
+                return true;
+            } else {
+
+                System.out.println("Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            System.out.println("PERMISSION GRANTED!");
+            return true;
+        }
+    }
 
 
 
 }
-    class BackgroundTask extends AsyncTask<String, Void, String> {
-     public static Context cont;
-     String urlString;
-        @Override
-        protected String doInBackground(String... args) {
-            urlString=args[0];
-            DHandler();
-
-            return null;
-        }
-        public void downloader(String durl,String name,String ext)
-        {
-
-            String url = durl;
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-            request.setDescription("Some description");
-            request.setTitle(name);
-// in order for this if to run, you must use the android 3.2 to compile your app
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                request.allowScanningByMediaScanner();
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            }
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name+ext);
-
-
-// get download service and enqueue file
-            DownloadManager manager = (DownloadManager)cont.getSystemService(Context.DOWNLOAD_SERVICE);
-            manager.enqueue(request);
-
-
-        }
-
-        public void DHandler()
-        {
-            try {
-                //Toast.makeText(getApplication(), "HELLO1", Toast.LENGTH_SHORT).show();
-                URL url = new URL(urlString);
-                BufferedReader reader = null;
-                System.out.println("starting");
-                StringBuilder builder = new StringBuilder();
-                try {
-                    reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-                    for (String line; (line = reader.readLine()) != null; ) {
-                        if(line.contains(".pdf")||line.contains(".PDF")){
-                            int locn = -1;
-                            locn=(line.contains(".pdf"))?(line.indexOf(".pdf")):(line.indexOf(".PDF"));
-
-                            int i=locn;
-                            while(line.charAt(i)!='\"' && i>=0)i--;
-                            String fileLink=null;
-                            if(i!=0)
-                            {
-                                fileLink=line.substring(i+1,locn+4);
-                                System.out.println(".!." + fileLink);
-                                String name = fileLink.substring(fileLink.lastIndexOf("/")+1,fileLink.length());
-                                System.out.println("filename:"+name);
-                                downloader(fileLink,name,".pdf");
-                            }
-                        }
-                    }
-
-                } finally {
-                    if (reader != null) try {
-                        reader.close();
-                    } catch (IOException logOrIgnore) {
-                    }
-
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-
-
-    }
