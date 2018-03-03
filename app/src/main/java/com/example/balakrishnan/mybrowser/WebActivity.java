@@ -182,6 +182,8 @@ public class WebActivity extends AppCompatActivity{
 
         if(webView.canGoBack()){
             webView.goBack();
+
+            urlET.setText(webView.getOriginalUrl());
         }
         else{
 

@@ -45,7 +45,11 @@ public class HomeActivity extends AppCompatActivity {
         sendIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            startWebActivity();
+
+                if(urlET.getText().toString().length()!=0)
+                    startWebActivity();
+                else
+                    Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -53,7 +57,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
+                if(urlET.getText().toString().length()!=0)
                 startWebActivity();
+                else
+                Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
