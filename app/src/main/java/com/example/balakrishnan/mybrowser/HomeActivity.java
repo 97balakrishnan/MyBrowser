@@ -13,6 +13,8 @@ import android.support.v7.graphics.Palette;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
@@ -85,7 +87,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Picasso.with(getApplicationContext())
-                        .load("https://source.unsplash.com/random")
+                        .load("https://source.unsplash.com/collection/319663")
                         .skipMemoryCache()
                         .into(backgroundIV, new Callback() {
                             @Override
@@ -94,6 +96,9 @@ public class HomeActivity extends AppCompatActivity {
                                     //Changing the color of send icon
                                     sendIV.setColorFilter(getDominantColor(backgroundIV.getDrawingCache()));
                                 }
+                                Animation zoomin= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoomin);
+                                backgroundIV.setAnimation(zoomin);
+                                backgroundIV.startAnimation(zoomin);
                             }
 
                             @Override
@@ -102,9 +107,14 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         });
 
-                handler.postDelayed(this,30000);
+                handler.postDelayed(this,20000);
             }
         });
+
+
+        Animation zoomin= AnimationUtils.loadAnimation(this,R.anim.zoomin);
+        backgroundIV.setAnimation(zoomin);
+        backgroundIV.startAnimation(zoomin);
     }
 
     //Getting dominant color from wallpaper
