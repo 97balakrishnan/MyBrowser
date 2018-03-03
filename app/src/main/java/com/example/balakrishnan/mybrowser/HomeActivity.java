@@ -10,12 +10,15 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -40,14 +43,26 @@ public class HomeActivity extends AppCompatActivity {
         sendIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this,WebActivity.class);
-                intent.putExtra("url",urlET.getText().toString().trim());
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(HomeActivity.this, urlET,urlET.getTransitionName());
-                startActivity(intent,optionsCompat.toBundle());
+            startWebActivity();
+            }
+        });
+
+        urlET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+
+                startWebActivity();
+                return true;
             }
         });
     }
+    public void startWebActivity(){
+        Intent intent = new Intent(HomeActivity.this,WebActivity.class);
+        intent.putExtra("url",urlET.getText().toString().trim());
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(HomeActivity.this, urlET,urlET.getTransitionName());
+        startActivity(intent,optionsCompat.toBundle());
 
+    }
     public void init(){
         backgroundIV = findViewById(R.id.backgroundIV);
         backgroundIV.setDrawingCacheEnabled(true);
@@ -71,7 +86,7 @@ public class HomeActivity extends AppCompatActivity {
             public void run() {
                 Picasso.with(getApplicationContext())
                         .load("https://source.unsplash.com/random")
-                        .skipMemoryCache().error(R.drawable.nointernet)
+                        .skipMemoryCache()
                         .into(backgroundIV, new Callback() {
                             @Override
                             public void onSuccess() {
@@ -83,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
 
                             @Override
                             public void onError() {
-
+                                Toast.makeText(getApplicationContext(),"No internet!",Toast.LENGTH_LONG).show();
                             }
                         });
 

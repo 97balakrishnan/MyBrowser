@@ -86,11 +86,6 @@ public class NewWebViewClient extends WebViewClient {
         System.out.println("error occured");
     }
 
-    private boolean isValidUrl(String url) {
-        Pattern p = Patterns.WEB_URL;
-        Matcher m = p.matcher(url.toLowerCase());
-        return m.matches();
-    }
 
 }
 

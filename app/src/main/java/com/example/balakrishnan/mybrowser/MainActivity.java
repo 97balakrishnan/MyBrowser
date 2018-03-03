@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
     public void loadHomeScreenImage() {
 
         Picasso.with(this)
-                .load("https://source.unsplash.com/random").error(R.drawable.nointernet).into(imageView, new Callback() {
+                .load("https://source.unsplash.com/random").into(imageView, new Callback() {
             @Override
             public void onSuccess() {
                 imageView.getDrawable();
