@@ -107,7 +107,7 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
                     for(int z=0;z<aExt.length;z++) {
 
                         if (line.contains(aExt[z]+"\"")){
-
+                            System.out.println(line);
                             int locn;
                             locn = (line.indexOf(aExt[z]+"\"")+aExt[z].length());
 
