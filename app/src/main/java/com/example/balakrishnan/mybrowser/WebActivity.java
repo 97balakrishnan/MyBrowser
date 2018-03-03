@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -46,6 +48,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+
+import fisk.chipcloud.ChipCloud;
+import fisk.chipcloud.ChipCloudConfig;
+import fisk.chipcloud.ChipListener;
 
 public class WebActivity extends AppCompatActivity{
 
@@ -255,11 +261,15 @@ public class WebActivity extends AppCompatActivity{
     }
 
 
-    public static String exts = ".pdf .ppt .pptx .PDF .doc .docx";
+    public static String exts1 = ".pdf .ppt .pptx .PDF .doc .docx";
+    public String exts = "";
     private EditText vDpath;
     private EditText edt;
     Switch cb;
     Switch cb2;
+
+    public String[] extensions = {".pdf",".ppt",".doc",".xls"};
+    public boolean[] extensionsSelected = {true,false,false,false};
 
     public void alertBoxWindow()
     {
@@ -269,39 +279,74 @@ public class WebActivity extends AppCompatActivity{
         dialogBuilder.setView(dialogView);
 
         regularFontChanger.replaceFonts((ViewGroup)dialogView);
-        TextInputLayout extensionsTIL = dialogView.findViewById(R.id.fileExtensionsTIL);
-        TextInputLayout directoryTIL = dialogView.findViewById(R.id.directoryTIL);
 
-        extensionsTIL.setTypeface(bold);
-        directoryTIL.setTypeface(bold);
+        FlexboxLayout flexbox = (FlexboxLayout) dialogView.findViewById(R.id.flexboxLayout);
 
-        edt   = dialogView.findViewById(R.id.edit1);
+
+        ChipCloudConfig config = new ChipCloudConfig()
+                .selectMode(ChipCloud.SelectMode.multi)
+                .checkedChipColor(Color.parseColor("#3F51B5"))
+                .checkedTextColor(Color.parseColor("#ffffff"))
+                .uncheckedChipColor(Color.parseColor("#efefef"))
+                .uncheckedTextColor(Color.parseColor("#000000"))
+                .useInsetPadding(true)
+                .typeface(bold);
+        //Create a new ChipCloud with a Context and ViewGroup:
+        ChipCloud chipCloud = new ChipCloud(this, flexbox,config);
+
+
+        chipCloud.addChip(".pdf", ContextCompat.getDrawable(this, R.drawable.pdf),true);
+        chipCloud.addChip(".ppt", ContextCompat.getDrawable(this, R.drawable.ppt),true);
+        chipCloud.addChip(".doc", ContextCompat.getDrawable(this, R.drawable.doc),true);
+        chipCloud.addChip(".xls", ContextCompat.getDrawable(this, R.drawable.xls),true);
+        for(int i=0;i<extensionsSelected.length;i++){
+            if(extensionsSelected[i]){
+                chipCloud.setChecked(i);
+            }
+        }
+
+        chipCloud.setListener(new ChipListener() {
+            @Override
+            public void chipCheckedChange(int i, boolean b, boolean b1) {
+                extensionsSelected[i]=b;
+            }
+        });
+
         vDpath= dialogView.findViewById(R.id.edit2);
 
-        cb =dialogView.findViewById(R.id.checkBox);
+        //cb =dialogView.findViewById(R.id.checkBox);
         cb2=dialogView.findViewById(R.id.checkBox2);
 
-        cb.setChecked(true);
+        //cb.setChecked(true);
         cb2.setChecked(false);
 
 
-        edt.setText(exts);
         dialogBuilder.setTitle("Download All");
 
         vDpath.setText(dpath);
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-                duplFlag=(cb.isChecked())?1:0;
+                //duplFlag=(cb.isChecked())?1:0;
                 replFlag=(cb2.isChecked())?1:0;
                 dpath=vDpath.getText().toString();
                 CreateDir(dpath);
 
-                exts=edt.getText().toString().trim();
-
-                BackgroundParseTask b=new BackgroundParseTask(WebActivity.this);
-                b.execute(urlET.getText().toString().trim(),exts);
-                System.out.println("status:"+b.getStatus().toString());
+                exts="";
+                for(int i=0;i<extensionsSelected.length;i++){
+                    if(extensionsSelected[i]){
+                        exts = exts+" "+extensions[i];
+                    }
+                }
+                if(exts.trim().length()==0){
+                    Toast.makeText(WebActivity.this,"Atlest one extension should be selected",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    System.out.println("Extensions "+exts);
+                    BackgroundParseTask b = new BackgroundParseTask(WebActivity.this);
+                    b.execute(urlET.getText().toString().trim(), exts);
+                    System.out.println("status:" + b.getStatus().toString());
+                }
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

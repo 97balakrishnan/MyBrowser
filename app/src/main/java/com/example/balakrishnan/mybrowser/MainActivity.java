@@ -458,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String exts = ".pdf .ppt .pptx .PDF .doc .docx";
     private EditText vDpath;
-    private EditText edt;
+    //private EditText edt;
     Switch cb;
     Switch cb2;
 
@@ -469,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         final View dialogView = inflater.inflate(R.layout.custom_layout, null);
         dialogBuilder.setView(dialogView);
 
-        edt   = dialogView.findViewById(R.id.edit1);
+        //edt   = dialogView.findViewById(R.id.edit1);
         vDpath= dialogView.findViewById(R.id.edit2);
 
          cb =dialogView.findViewById(R.id.checkBox);
@@ -479,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
         cb2.setChecked(false);
 
 
-        edt.setText(exts);
+        //edt.setText(exts);
         dialogBuilder.setTitle("Download All Menu");
 
         vDpath.setText(dpath);
@@ -491,7 +491,7 @@ public class MainActivity extends AppCompatActivity {
                 dpath=vDpath.getText().toString();
                 CreateDir(dpath);
 
-                exts=edt.getText().toString().trim();
+                //exts=edt.getText().toString().trim();
 
                 new BackgroundParseTask().execute(et.getText().toString().trim(),exts);
 

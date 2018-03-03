@@ -2,31 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:orientation="vertical"
     android:padding="10dp">
 
 
 
-    <android.support.design.widget.TextInputLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        android:layout_marginRight="10dp"
+        android:text="Choose extensions to download"/>
+
+    <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
-        android:id="@+id/fileExtensionsTIL"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="4dp"
+        android:id="@+id/flexboxLayout"
         android:layout_marginBottom="4dp"
-        android:layout_marginRight="10dp" >
-        <EditText
-            android:id="@+id/edit1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:drawableTint="#3F51B5"
-            android:drawableLeft="@drawable/extension_icon"
-            android:hint="Enter file extensions to download"
-            android:inputType="text" />
-
-    </android.support.design.widget.TextInputLayout>
-
+        android:layout_marginRight="10dp"></com.google.android.flexbox.FlexboxLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -57,6 +58,7 @@
         android:layout_marginTop="39dp"
         android:layout_marginLeft="10dp"
         android:thumbTint="#3F51B5"
+        android:visibility="gone"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="4dp"
         android:text="Dont download duplicate files      "
