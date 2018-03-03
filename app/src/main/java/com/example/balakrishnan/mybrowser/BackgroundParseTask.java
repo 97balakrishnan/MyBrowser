@@ -39,7 +39,7 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
         act.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(act.getApplicationContext(),"Downloaded "+cnt+" files",Toast.LENGTH_LONG).show();
+                Toast.makeText(act.getApplicationContext(),"Downloaded "+cnt+" files+\n"+dcnt+"Duplicate files ignored",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -105,10 +105,9 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
 
 
                     for(int z=0;z<aExt.length;z++) {
-                        if(z==0)
-                            System.out.println(line);
+
                         if (line.contains(aExt[z]+"\"")){
-                            System.out.println(line);
+                            
                             int locn = -1;
                             locn = (line.indexOf(aExt[z]+"\"")+aExt[z].length());
 
