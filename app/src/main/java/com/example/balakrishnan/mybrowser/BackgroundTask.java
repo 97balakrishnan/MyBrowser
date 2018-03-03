@@ -25,10 +25,10 @@ class BackgroundTask extends AsyncTask<String, Void, String> {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setDescription("Some description");
         request.setTitle(fileName);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             request.allowScanningByMediaScanner();
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
         }
 
 

@@ -105,7 +105,9 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
 
 
                     for(int z=0;z<aExt.length;z++) {
-                        if (line.contains(aExt[z]+"\"") ){
+                        if(z==0)
+                            System.out.println(line);
+                        if (line.contains(aExt[z]+"\"")){
                             System.out.println(line);
                             int locn = -1;
                             locn = (line.indexOf(aExt[z]+"\"")+aExt[z].length());
@@ -117,6 +119,8 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
                             String fileLink=line.substring(i,locn);
                             if(!(fileLink.startsWith("http://")||fileLink.startsWith("https://")))
                             {
+                                if(!fileLink.startsWith("/"))
+                                    fileLink="/"+fileLink;
                                 fileLink=getDomain(urlString)+fileLink;
                             }
 
