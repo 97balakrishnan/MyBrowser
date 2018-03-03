@@ -71,6 +71,7 @@ public class WebActivity extends AppCompatActivity{
         setContentView(R.layout.activity_web);
         getSupportActionBar().hide();
         init();
+
         //Changing the font throughout the activity
         regularFontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
 
@@ -281,7 +282,9 @@ public class WebActivity extends AppCompatActivity{
 
                 exts=edt.getText().toString().trim();
 
-                new BackgroundParseTask().execute(urlET.getText().toString().trim(),exts);
+                BackgroundParseTask b=new BackgroundParseTask(WebActivity.this);
+                b.execute(urlET.getText().toString().trim(),exts);
+                System.out.println("status:"+b.getStatus().toString());
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

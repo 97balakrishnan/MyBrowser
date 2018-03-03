@@ -373,6 +373,10 @@ public class MainActivity extends AppCompatActivity {
                     alertBoxWindow();
 
                 }
+                else
+                {
+                    System.out.println("Permission not granted");
+                }
 
             }
         });
@@ -490,6 +494,8 @@ public class MainActivity extends AppCompatActivity {
                 exts=edt.getText().toString().trim();
 
                 new BackgroundParseTask().execute(et.getText().toString().trim(),exts);
+
+
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -1,5 +1,6 @@
 package com.example.balakrishnan.mybrowser;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -8,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 import static com.example.balakrishnan.mybrowser.MainActivity.cont;
 
@@ -20,6 +22,27 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
     int dcnt;
     int rcnt;
     String msg;
+    ArrayList<String> ListofLinks=new ArrayList<>();
+    Activity act;
+    BackgroundParseTask()
+    {
+
+    }
+    BackgroundParseTask(Activity act)
+    {
+        this.act=act;
+    }
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+
+        act.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(act.getApplicationContext(),"Downloaded "+cnt+" files",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     @Override
     protected String doInBackground(String... args) {
@@ -83,7 +106,7 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
 
                     for(int z=0;z<aExt.length;z++) {
                         if (line.contains(aExt[z]+"\"") ){
-
+                            System.out.println(line);
                             int locn = -1;
                             locn = (line.indexOf(aExt[z]+"\"")+aExt[z].length());
 
@@ -92,20 +115,29 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
                             i++;
 
                             String fileLink=line.substring(i,locn);
-                            System.out.println(fileLink);
+                            if(!(fileLink.startsWith("http://")||fileLink.startsWith("https://")))
+                            {
+                                fileLink=getDomain(urlString)+fileLink;
+                            }
 
-                            DownloadLinkChecker dlc = new DownloadLinkChecker(fileLink,aExt);
-                            if(dlc.isDownloadLink())
-                                cnt++;
+                            if(!ListofLinks.contains(fileLink)) {
+                                DownloadLinkChecker dlc = new DownloadLinkChecker(fileLink,aExt);
+                                if(dlc.isDownloadLink())
+                                    cnt++;
+
+                                ListofLinks.add(fileLink);
+                            }
+                            else
+                            dcnt++;
 
                         }
                     }
                 }
-
             } finally {
                 if (reader != null) try {
                     reader.close();
                 } catch (IOException logOrIgnore) {
+                    logOrIgnore.printStackTrace();
                 }
 
             }
@@ -116,6 +148,23 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
             System.out.println(e);
         }
     }
-
+    private String getDomain(String url)
+    {
+        String domain,prot="";
+        if(url.startsWith("https://"))
+            prot="https://";
+        else if(url.startsWith("http://"))
+            prot="http://";
+        int end=url.indexOf('/',prot.length());
+        if(end!=-1) {
+            domain = url.substring(0, end);
+            System.out.println("domain:" + domain);
+            return domain;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
 }
