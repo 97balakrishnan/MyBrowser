@@ -3,6 +3,8 @@ package com.example.balakrishnan.mybrowser;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -11,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static com.example.balakrishnan.mybrowser.BackgroundTask.bcnt;
 import static com.example.balakrishnan.mybrowser.MainActivity.cont;
 
 /**
@@ -18,12 +21,25 @@ import static com.example.balakrishnan.mybrowser.MainActivity.cont;
  */
 
 public class BackgroundParseTask extends AsyncTask<String, Void, String> {
-    int cnt;
-    int dcnt;
-    int rcnt;
-    String msg;
-    ArrayList<String> ListofLinks=new ArrayList<>();
-    Activity act;
+    public static int cnt;
+    private int dcnt;
+    private int rcnt;
+    private String msg;
+    private String urlString;
+    private ArrayList<String> ListofLinks=new ArrayList<>();
+    private Activity act;
+    public void showNotification()
+    {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(act.getApplicationContext())
+                .setSmallIcon(R.drawable.download_icon)
+                .setContentTitle("Download Complete")
+                .setContentText("Downloaded "+cnt+" files \n"+dcnt+" Duplicate files ignored")
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(act.getApplicationContext());
+        notificationManager.notify(777, mBuilder.build());
+
+
+    }
     BackgroundParseTask()
     {
 
@@ -35,19 +51,21 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-
+        ListofLinks.clear();
         act.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(act.getApplicationContext(),"Downloaded "+cnt+" files+\n"+dcnt+"Duplicate files ignored",Toast.LENGTH_LONG).show();
+                System.out.println("post execution");
+                Toast.makeText(act.getApplicationContext(),"Downloaded "+cnt+" files \n "+dcnt+" Duplicate files ignored",Toast.LENGTH_LONG).show();
+
             }
         });
     }
 
     @Override
     protected String doInBackground(String... args) {
-
-        String urlString = args[0];
+        cnt=0;
+        urlString = args[0];
         String exts=args[1];
         DHandler(urlString,exts);
         /*try {
@@ -100,40 +118,26 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
                 dcnt=0;
                 rcnt=0;
                 String[] aExt = exts.split(" ");
+                String longLine;
+                for (; (longLine = reader.readLine()) != null; ) {
 
-                for (; (line = reader.readLine()) != null; ) {
-
-
+                    String[] lines=longLine.split(" ");
+                    for(int i=0;i<lines.length;i++)
+                    {line=lines[i];
+                    System.out.println(line);
                     for(int z=0;z<aExt.length;z++) {
 
-                        if (line.contains(aExt[z]+"\"")){
-                            System.out.println(line);
-                            int locn;
-                            locn = (line.indexOf(aExt[z]+"\"")+aExt[z].length());
-
-                            int i = locn-1;
-                            while (line.charAt(i) != '\"' && i >= 0) i--;
-                            i++;
-
-                            String fileLink=line.substring(i,locn);
-                            if(!(fileLink.startsWith("http://")||fileLink.startsWith("https://")))
+                        String fileLink;
+                            if((fileLink=compute(line,aExt[z]))!=null)
                             {
-                                if(!fileLink.startsWith("/"))
-                                    fileLink="/"+fileLink;
-                                fileLink=getDomain(urlString)+fileLink;
-                            }
-
-                            if(!ListofLinks.contains(fileLink)) {
+                                System.out.println("fileLink:"+fileLink);
                                 DownloadLinkChecker dlc = new DownloadLinkChecker(fileLink,aExt);
                                 if(dlc.isDownloadLink())
                                     cnt++;
 
-                                ListofLinks.add(fileLink);
                             }
-                            else
-                            dcnt++;
 
-                        }
+                    }
                     }
                 }
             } finally {
@@ -150,6 +154,51 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+    private String compute(String line,String ext)
+    {
+
+        if (line.startsWith("href=")&&line.contains(ext+"\"")){
+
+            String fileLink=line.substring(6,line.indexOf(ext)+ext.length());
+            System.out.println("FileLink"+fileLink);
+
+            if(!(fileLink.startsWith("http://")||fileLink.startsWith("https://")))
+            {
+                if(!fileLink.startsWith("/"))
+                    fileLink="/"+fileLink;
+                fileLink=getDomain(urlString)+fileLink;
+            }
+
+            if(!ListofLinks.contains(fileLink)) {
+                ListofLinks.add(fileLink);
+                return fileLink;
+            }
+            else
+                dcnt++;
+
+        }
+        else if(line.startsWith("href=")&&line.contains(ext))
+        {
+
+            String fileLink=line.substring(5,line.indexOf(ext)+ext.length());
+            System.out.println("filelink"+fileLink);
+            if(!(fileLink.startsWith("http://")||fileLink.startsWith("https://")))
+            {
+                if(!fileLink.startsWith("/"))
+                    fileLink="/"+fileLink;
+                fileLink=getDomain(urlString)+fileLink;
+            }
+
+            if(!ListofLinks.contains(fileLink)) {
+                ListofLinks.add(fileLink);
+                return fileLink;
+            }
+            else
+                dcnt++;
+
+        }
+        return null;
     }
     private String getDomain(String url)
     {

@@ -337,7 +337,10 @@ public class WebActivity extends AppCompatActivity{
                 exts="";
                 for(int i=0;i<extensionsSelected.length;i++){
                     if(extensionsSelected[i]){
-                        exts = exts+" "+extensions[i];
+                        if(!exts.equals(""))
+                        exts =exts+" "+extensions[i];
+                        else
+                        exts=extensions[i];
                     }
                 }
                 if(exts.trim().length()==0){
@@ -347,7 +350,7 @@ public class WebActivity extends AppCompatActivity{
                     System.out.println("Extensions "+exts);
                     BackgroundParseTask b = new BackgroundParseTask(WebActivity.this);
                     b.execute(urlET.getText().toString().trim(), exts);
-                    System.out.println("status:" + b.getStatus().toString());
+                    System.out.println("status:" + urlET);
                 }
             }
         });

@@ -33,6 +33,7 @@ public class DownloadLinkChecker {
                     else
                         break;
 
+
                     new BackgroundTask().execute(fileLink, fileName, aExt[z]);
                     return true;
                 }
