@@ -211,13 +211,13 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Please Enter URL", Toast.LENGTH_SHORT).show();
         else if (url.contains("http://") || url.contains("https://"))  //is a valid url
             wv.loadUrl(url);
-<<<<<<< HEAD
+
         else if(url.contains("."))                                  //is an url but does'nt start with http or https
             wv.loadUrl("http://"+url);
-=======
+
         else if (url.contains("."))                                  //is an url but doesnt start with http or https
             wv.loadUrl("http://" + url);
->>>>>>> d48e5fba48dd4d4772d375c6229d1e78aa1d0dd9
+
         else                                                        // not an url therefore searched on google
             wv.loadUrl("http://google.com/search?q=" + url);
         hideSoftKeyboard();
@@ -415,10 +415,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-<<<<<<< HEAD
+
     public void buttonClick(View v) {
         //EditText et = findViewById(R.id.editText2);
-        String s = et.getText().toString();
+
+       /* String s = et.getText().toString();
         if (fl == false && s.length() == 0) {
 
             Picasso.with(this).load("https://source.unsplash.com/random").skipMemoryCache().error(R.drawable.nointernet).into(imageView);
@@ -430,8 +431,11 @@ public class MainActivity extends AppCompatActivity {
             t.setVisibility(View.INVISIBLE);
             w.setVisibility(View.INVISIBLE);
             wv.loadUrl(s);
-=======
->>>>>>> d48e5fba48dd4d4772d375c6229d1e78aa1d0dd9
+
+        }*/
+    }
+
+
 
     public void showSoftKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -453,6 +457,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText edt;
     Switch cb;
     Switch cb2;
+
     public void alertBoxWindow()
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -471,7 +476,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         edt.setText(exts);
-        dialogBuilder.setTitle("DownloadAll Menu");
+        dialogBuilder.setTitle("Download All Menu");
 
         vDpath.setText(dpath);
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {

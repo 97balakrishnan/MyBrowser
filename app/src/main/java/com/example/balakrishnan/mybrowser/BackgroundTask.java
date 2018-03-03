@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 
-import static com.example.balakrishnan.mybrowser.MainActivity.dpath;
+import static com.example.balakrishnan.mybrowser.WebActivity.dpath;
 
 /**
  * Created by balakrishnan on 2/3/18.
@@ -34,7 +34,7 @@ class BackgroundTask extends AsyncTask<String, Void, String> {
 
         request.setDestinationInExternalPublicDir(dirpath, fileName + extension);
 
-        DownloadManager manager = (DownloadManager) MainActivity.cont.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager manager = (DownloadManager) WebActivity.cont.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
 
         return null;

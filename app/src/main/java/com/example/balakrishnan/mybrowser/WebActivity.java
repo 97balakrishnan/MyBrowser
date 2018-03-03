@@ -1,7 +1,11 @@
 package com.example.balakrishnan.mybrowser;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,11 +15,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +32,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +40,11 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class WebActivity extends AppCompatActivity{
 
@@ -46,7 +55,14 @@ public class WebActivity extends AppCompatActivity{
     EditText urlET;
     ImageView downloadIV,sendIV;
     WebView webView;
+
+    public static String dpath;
+    public static Context cont;
+    public ArrayList<String> FileList;
+    public ArrayList<String> DownloadList;
     public static SwipeRefreshLayout swipeRefreshLayout;
+    private int backFlag = 0,duplFlag=1,replFlag=0;
+    private boolean isFirstLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +132,7 @@ public class WebActivity extends AppCompatActivity{
     public void init(){
 
 
+        initElements();
         downloadIV = findViewById(R.id.downloadIV);
         sendIV = findViewById(R.id.sendIV);
         regular = Typeface.createFromAsset(getAssets(), "fonts/product_san_regular.ttf");
@@ -188,119 +205,162 @@ public class WebActivity extends AppCompatActivity{
         popup.getMenu().getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                new DownloadAsyncTask().execute(urlET.getText().toString().trim());
+                alertBoxWindow();
                 return false;
             }
         });
 
     }
 
-    public void loadURL(String url){
+    public void initElements()
+    {
 
-        if(url.length()==0)
-            Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
-        else if(url.contains("http://")||url.contains("https://"))
+        DownloadList = new ArrayList<>();
+
+        dpath="/Download";
+        cont = this.getApplicationContext();
+
+
+
+    }
+
+    public void loadURL(String url) {
+
+        if (url.length() == 0)                                          //url field left empty
+            Toast.makeText(getApplicationContext(), "Please Enter URL", Toast.LENGTH_SHORT).show();
+        else if (url.contains("http://") || url.contains("https://"))  //is a valid url
             webView.loadUrl(url);
-        else if(url.contains("."))
+
+        else if(url.contains("."))                                  //is an url but does'nt start with http or https
             webView.loadUrl("http://"+url);
-        else
-            webView.loadUrl("http://google.com/search?q="+url);
+
+        else if (url.contains("."))                                  //is an url but doesnt start with http or https
+            webView.loadUrl("http://" + url);
+
+        else                                                        // not an url therefore searched on google
+            webView.loadUrl("http://google.com/search?q=" + url);
         hideSoftKeyboard();
-        urlET.setSelectAllOnFocus(true);
+
     }
 
 
-    public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
+    public static String exts = ".pdf .ppt .pptx .PDF .doc .docx";
+    private EditText vDpath;
+    private EditText edt;
+    Switch cb;
+    Switch cb2;
 
-        String urlString;
+    public void alertBoxWindow()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_layout, null);
+        dialogBuilder.setView(dialogView);
 
-        @Override
-        protected String doInBackground(String... args) {
+        edt   = dialogView.findViewById(R.id.edit1);
+        vDpath= dialogView.findViewById(R.id.edit2);
 
-            urlString = args[0];
-            DHandler();
+        cb =dialogView.findViewById(R.id.checkBox);
+        cb2=dialogView.findViewById(R.id.checkBox2);
 
-            return null;
-        }
+        cb.setChecked(true);
+        cb2.setChecked(false);
 
-        public void downloader(String durl, String name, String ext) {
 
-            String url = durl;
+        edt.setText(exts);
+        dialogBuilder.setTitle("Download All Menu");
 
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-            request.setDescription("Some description");
-            request.setTitle(name);
+        vDpath.setText(dpath);
+        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
 
-            //Min SDK should be greater than Honeycomb SDK
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                request.allowScanningByMediaScanner();
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                duplFlag=(cb.isChecked())?1:0;
+                replFlag=(cb2.isChecked())?1:0;
+                dpath=vDpath.getText().toString();
+                CreateDir(dpath);
+
+                exts=edt.getText().toString().trim();
+
+                new BackgroundParseTask().execute(urlET.getText().toString().trim(),exts);
             }
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name + ext);
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
 
-
-            //Get download service and enqueue file
-            DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-            manager.enqueue(request);
-
-
+    public void CreateDir(String s)
+    {
+        File dir = new File(s);
+        if(dir.exists())
+        {
+            System.out.println("Directory "+s+" exists");
         }
-
-        public void DHandler() {
+        else {
             try {
-
-                URL url = new URL(urlString);
-                BufferedReader reader = null;
-
-                System.out.println("starting");
-
-                //StringBuilder builder = new StringBuilder();
-
-                try {
-
-                    reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-
-                    for (String line; (line = reader.readLine()) != null; ) {
-
-                        if (line.contains(".pdf") || line.contains(".PDF")) {
-
-                            int locn = -1;
-
-                            locn = (line.contains(".pdf")) ? (line.indexOf(".pdf")) : (line.indexOf(".PDF"));
-
-                            int i = locn;
-
-                            while (line.charAt(i) != '\"' && i >= 0) i--;
-
-                            String fileLink = null;
-
-                            if (i != 0) {
-
-                                fileLink = line.substring(i + 1, locn + 4);
-                                System.out.println(".!." + fileLink);
-                                String name = fileLink.substring(fileLink.lastIndexOf("/") + 1, fileLink.length());
-                                System.out.println("filename:" + name);
-                                downloader(fileLink, name, ".pdf");
-
-                            }
-                        }
-                    }
-
-                } finally {
-                    if (reader != null) try {
-
-                        reader.close();
-
-                    } catch (IOException logOrIgnore) {
-                        logOrIgnore.printStackTrace();
-                    }
-
+                if (dir.mkdir()) {
+                    System.out.println("Directory created");
+                } else {
+                    System.out.println("Directory is not created");
                 }
             } catch (Exception e) {
-
-                System.out.println(e.getMessage());
-
+                e.printStackTrace();
             }
         }
+        dpath=dir.getPath();
     }
+
+    public void FileListFunction()
+    {
+
+        FileList=new ArrayList<>();
+        FileList.clear();
+
+        File f = Environment.getExternalStoragePublicDirectory(dpath);
+        if(f.listFiles()==null)
+            return;
+        System.out.println(dpath);
+        File[] g = f.listFiles();
+
+        for(File x:g)
+        {
+            String fname=x.getAbsoluteFile().getName();
+            if(!FileList.contains(fname))
+                FileList.add(fname);
+
+        }
+        try {
+            Class.forName("android.os.AsyncTask");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Permission is granted");
+                return true;
+            } else {
+
+                System.out.println("Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            System.out.println("PERMISSION GRANTED!");
+            return true;
+        }
+    }
+
+
 }
