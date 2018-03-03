@@ -68,6 +68,7 @@ public class HomeActivity extends AppCompatActivity {
     public void init(){
         backgroundIV = findViewById(R.id.backgroundIV);
         backgroundIV.setDrawingCacheEnabled(true);
+        backgroundIV.animate().alpha(0).start();
         sendIV = findViewById(R.id.sendIV);
         regular = Typeface.createFromAsset(getAssets(), "fonts/product_san_regular.ttf");
         bold = Typeface.createFromAsset(getAssets(),"fonts/product_sans_bold.ttf");
@@ -96,10 +97,29 @@ public class HomeActivity extends AppCompatActivity {
                                     //Changing the color of send icon
                                     sendIV.setColorFilter(getDominantColor(backgroundIV.getDrawingCache()));
                                 }
+
                                 Animation zoomin= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoomin);
+                                zoomin.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        backgroundIV.animate().alpha(1).setDuration(1000).start();
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        backgroundIV.animate().alpha(0).setDuration(1000).start();
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+
+                                    }
+                                });
                                 backgroundIV.setAnimation(zoomin);
                                 backgroundIV.startAnimation(zoomin);
+
                             }
+
 
                             @Override
                             public void onError() {
@@ -111,10 +131,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-        Animation zoomin= AnimationUtils.loadAnimation(this,R.anim.zoomin);
-        backgroundIV.setAnimation(zoomin);
-        backgroundIV.startAnimation(zoomin);
     }
 
     //Getting dominant color from wallpaper
