@@ -102,12 +102,12 @@ public class HomeActivity extends AppCompatActivity {
                                 zoomin.setAnimationListener(new Animation.AnimationListener() {
                                     @Override
                                     public void onAnimationStart(Animation animation) {
-                                        backgroundIV.animate().alpha(1).setDuration(1000).start();
+                                        backgroundIV.animate().alpha(1).setDuration(2000).start();
                                     }
 
                                     @Override
                                     public void onAnimationEnd(Animation animation) {
-                                        backgroundIV.animate().alpha(0).setDuration(1000).start();
+                                        backgroundIV.animate().alpha(0).setDuration(2000).start();
                                     }
 
                                     @Override
