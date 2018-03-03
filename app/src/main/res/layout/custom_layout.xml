@@ -1,67 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
+
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="Download All"
-        android:textColor="#000000"
-        android:textSize="30dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/fileExtensionsTIL"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="10dp" >
+        <EditText
+            android:id="@+id/edit1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-    <TextView
+            android:drawableTint="#3F51B5"
+            android:drawableLeft="@drawable/extension_icon"
+            android:hint="Enter file extensions to download"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:gravity="center"
-        android:text="Enter file extensions to download"
-        android:textColor="#000000"
-        android:textSize="20dp" />
-
-    <EditText
-        android:id="@+id/edit1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="115dp"
-        android:inputType="text" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:gravity="center"
-        android:text="Enter file extensions to download"
-        android:textColor="#000000"
-        android:textSize="20dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
-        android:gravity="center"
-        android:text="Enter Directory to store"
-        android:textColor="#000000"
-        android:textSize="20dp" />
-
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:id="@+id/directoryTIL"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="10dp">
     <EditText
         android:id="@+id/edit2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Enter Directory to store"
+        android:drawableLeft="@drawable/file_icon"
+        android:drawableTint="#3F51B5"
         android:layout_marginTop="215dp"
         android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
 
     <Switch
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/edit2"
+        android:layout_gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp"
+        android:layout_marginLeft="10dp"
+        android:thumbTint="#3F51B5"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="4dp"
         android:text="Dont download duplicate files      "
         android:switchMinWidth="50dp"
         />
@@ -69,11 +66,17 @@
         android:id="@+id/checkBox2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+
+        android:layout_marginRight="10dp"
         android:layout_below="@+id/edit2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="4dp"
+        android:thumbTint="#3F51B5"
+        android:layout_marginBottom="8dp"
         android:text="Replace original files                      "
         android:switchMinWidth="50dp"
         android:enabled="false"
         />
-</RelativeLayout>
+</LinearLayout>

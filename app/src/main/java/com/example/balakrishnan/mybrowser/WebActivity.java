@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -134,6 +135,10 @@ public class WebActivity extends AppCompatActivity{
 
 
         initElements();
+
+        isStoragePermissionGranted();
+        FileListFunction();
+
         downloadIV = findViewById(R.id.downloadIV);
         sendIV = findViewById(R.id.sendIV);
         regular = Typeface.createFromAsset(getAssets(), "fonts/product_san_regular.ttf");
@@ -206,7 +211,12 @@ public class WebActivity extends AppCompatActivity{
         popup.getMenu().getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                alertBoxWindow();
+                if(isStoragePermissionGranted()) {
+                    alertBoxWindow();
+                }
+                else{
+                    Toast.makeText(WebActivity.this,"Storage permission not granted",Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
         });
@@ -258,6 +268,13 @@ public class WebActivity extends AppCompatActivity{
         final View dialogView = inflater.inflate(R.layout.custom_layout, null);
         dialogBuilder.setView(dialogView);
 
+        regularFontChanger.replaceFonts((ViewGroup)dialogView);
+        TextInputLayout extensionsTIL = dialogView.findViewById(R.id.fileExtensionsTIL);
+        TextInputLayout directoryTIL = dialogView.findViewById(R.id.directoryTIL);
+
+        extensionsTIL.setTypeface(bold);
+        directoryTIL.setTypeface(bold);
+
         edt   = dialogView.findViewById(R.id.edit1);
         vDpath= dialogView.findViewById(R.id.edit2);
 
@@ -269,7 +286,7 @@ public class WebActivity extends AppCompatActivity{
 
 
         edt.setText(exts);
-        dialogBuilder.setTitle("Download All Menu");
+        dialogBuilder.setTitle("Download All");
 
         vDpath.setText(dpath);
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
