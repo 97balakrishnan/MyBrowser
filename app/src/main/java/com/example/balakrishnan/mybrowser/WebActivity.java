@@ -21,7 +21,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -36,6 +39,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import fisk.chipcloud.ChipCloud;
 import fisk.chipcloud.ChipCloudConfig;
@@ -64,7 +69,7 @@ public class WebActivity extends AppCompatActivity{
     EditText urlET;
     ImageView downloadIV,sendIV;
     WebView webView;
-
+    public static List<Suggestion> sList = new ArrayList<>();
     public static String dpath;
     public static Context cont;
     public ArrayList<String> FileList;
@@ -137,6 +142,7 @@ public class WebActivity extends AppCompatActivity{
                 }
         );
 
+        SearchSuggestionInitiate();
 
         urlET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -152,12 +158,30 @@ public class WebActivity extends AppCompatActivity{
             @Override
             public void afterTextChanged(Editable editable) {
 
+
                 System.out.println(urlET.getText().toString());
-                SearchSuggestion s = new SearchSuggestion(urlET.getText().toString());
+                String q=urlET.getText().toString();
+                if(!q.startsWith("http://"))
+                    s.updateSuggestion(q);
+                sAdapter.notifyDataSetChanged();
             }
         });
     }
 
+    SearchSuggestion s;
+    RecyclerView recyclerView;
+    SuggestionAdapter sAdapter;
+    LinearLayoutManager layoutManager;
+    public void SearchSuggestionInitiate()
+    {
+        recyclerView = findViewById(R.id.recycler_view);
+        sAdapter = new SuggestionAdapter(sList,getApplicationContext());
+        layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(sAdapter);
+        s=new SearchSuggestion();
+    }
     public void init(){
 
 

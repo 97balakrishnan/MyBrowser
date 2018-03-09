@@ -16,17 +16,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
+import android.support.v4.app.SupportActivity;
 /**
  * Created by balakrishnan on 4/3/18.
  */
 
 public class SearchSuggestion {
-    public ArrayList<String> sList;
+
     SearchSuggestion(){}
-    SearchSuggestion(String q)
+    public void updateSuggestion(String q)
     {
-        sList=new ArrayList<>();
+        WebActivity.sList.clear();
 
         Retrofit retrofit = null;
         retrofit = new Retrofit.Builder()
@@ -43,9 +43,13 @@ public class SearchSuggestion {
                 if(response.isSuccessful())
                 {
                     try{
-                        sList.clear();
                         String temp = response.body().string();
                         System.out.println(temp);
+                        String[] data = temp.replace("[","").replace("]","").split(",");
+            //          System.out.println("suggestion data "+data[1]+" "+temp.length());
+                        for(int i=0;i<data.length;i++){
+                            WebActivity.sList.add(new Suggestion(data[i]));
+                        }
                     }
                     catch(Exception e)
                     {
