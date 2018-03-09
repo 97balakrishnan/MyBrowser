@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.example.balakrishnan.mybrowser.BackgroundTask.bcnt;
 import static com.example.balakrishnan.mybrowser.MainActivity.cont;
 
 /**

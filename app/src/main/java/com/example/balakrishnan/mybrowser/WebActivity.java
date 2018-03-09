@@ -22,6 +22,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -135,6 +137,25 @@ public class WebActivity extends AppCompatActivity{
                 }
         );
 
+
+        urlET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                System.out.println(urlET.getText().toString());
+                SearchSuggestion s = new SearchSuggestion(urlET.getText().toString());
+            }
+        });
     }
 
     public void init(){

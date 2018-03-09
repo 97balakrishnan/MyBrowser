@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         getSupportActionBar().hide();
 
+        SearchSuggestion s= new SearchSuggestion();
         init();
         loadBackgroundImage();
         boldFontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
@@ -64,6 +67,8 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
     }
     public void startWebActivity(){
         Intent intent = new Intent(HomeActivity.this,WebActivity.class);
