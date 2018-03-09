@@ -3,14 +3,14 @@
     android:layout_width="wrap_content"
     android:layout_height="35dp"
     android:layout_margin="5dp"
-    app:cardElevation="5dp"
+    app:cardElevation="10dp"
     app:cardBackgroundColor="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="17.5dp">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/suggestion_item_bg">
+        >
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
