@@ -110,6 +110,9 @@ public class WebActivity extends AppCompatActivity{
 
                     String url=urlET.getText().toString().trim();
                     loadURL(url);
+                    sList.clear();
+                    sAdapter.notifyDataSetChanged();
+                    urlET.clearFocus();
                     handled = true;
                 }
                 return handled;
@@ -202,7 +205,7 @@ public class WebActivity extends AppCompatActivity{
         layoutManager.setJustifyContent(JustifyContent.FLEX_END);
 
         recyclerView = findViewById(R.id.recycler_view);
-        sAdapter = new SuggestionAdapter(sList,getApplicationContext());
+        sAdapter = new SuggestionAdapter(sList,getApplicationContext(),this);
         recyclerView.setLayoutManager(layoutManager);
 
 

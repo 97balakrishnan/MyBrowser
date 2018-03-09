@@ -17,6 +17,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import android.support.v4.app.SupportActivity;
+
+import static com.example.balakrishnan.mybrowser.HomeActivity.sList1;
+import static com.example.balakrishnan.mybrowser.WebActivity.sAdapter;
+import static com.example.balakrishnan.mybrowser.WebActivity.sList;
+
 /**
  * Created by balakrishnan on 4/3/18.
  */
@@ -27,8 +32,9 @@ public class SearchSuggestion {
     SearchSuggestion(){}
     public void updateSuggestion(String q)
     {
-        WebActivity.sList.clear();
-
+        if(sList!=null)
+            sList.clear();
+        HomeActivity.sList1.clear();
         Retrofit retrofit = null;
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://suggestqueries.google.com/complete/")
@@ -46,14 +52,20 @@ public class SearchSuggestion {
                     try{
                         String temp = response.body().string();
                         System.out.println(temp);
-                        WebActivity.sList.clear();
+                        if(sList!=null)
+                            sList.clear();
+                        sList1.clear();
                         String[] data = temp.replace("[","").replace("]","").split(",");
             //          System.out.println("suggestion data "+data[1]+" "+temp.length());
                         for(int i=0;i<data.length&&i<=(NUMBER_OF_SUGGESTIONS);i++){
                             if(!data[i].startsWith("http://")&&!data[i].startsWith("https://")&&i>0)
-                            WebActivity.sList.add(new Suggestion(data[i]));
+                                if(sList!=null)
+                                    sList.add(new Suggestion(data[i]));
+                            sList1.add(new Suggestion(data[i]));
                         }
+                        if(sAdapter!=null)
                         WebActivity.sAdapter.notifyDataSetChanged();
+                        HomeActivity.sAdapter1.notifyDataSetChanged();
                     }
                     catch(Exception e)
                     {

@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -24,17 +26,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
     ImageView backgroundIV,sendIV;
     Typeface regular,bold;
     FontChanger regularFontChanger,boldFontChanger;
-    EditText urlET;
-
+    public static EditText urlET;
+    TextView welcomeTV;
+    TextView clockTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +76,75 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+        SearchSuggestionInitiate();
+        urlET.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(urlET.length()==0)
+                {
+                    welcomeTV.setVisibility(View.VISIBLE);
+                    clockTV.setVisibility(View.VISIBLE);
+                    sList1.clear();
+                    sAdapter1.notifyDataSetChanged();
+                }
+
+                return true;
+            }
+        });
+        urlET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                System.out.println(urlET.getText().toString());
+                String q=urlET.getText().toString();
+                if(!q.startsWith("http://")&&!q.startsWith("https://"))
+                    s1.updateSuggestion(q);
+                welcomeTV.setVisibility(View.INVISIBLE);
+                clockTV.setVisibility(View.INVISIBLE);
 
 
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(urlET.length()==0)
+                {
+                    welcomeTV.setVisibility(View.VISIBLE);
+                    clockTV.setVisibility(View.VISIBLE);
+                    sList1.clear();
+                    sAdapter1.notifyDataSetChanged();
+                }
+
+            }
+        });
+
+    }
+    SearchSuggestion s1=new SearchSuggestion();
+    RecyclerView recyclerView;
+
+    //LinearLayoutManager layoutManager;
+    FlexboxLayoutManager layoutManager;
+    public static SuggestionAdapter sAdapter1;
+    public static List<Suggestion> sList1 = new ArrayList<>();
+    public void SearchSuggestionInitiate()
+    {
+
+
+        layoutManager = new FlexboxLayoutManager(getApplicationContext());
+        layoutManager.setFlexDirection(FlexDirection.ROW_REVERSE);
+        layoutManager.setJustifyContent(JustifyContent.FLEX_END);
+
+        recyclerView = findViewById(R.id.recycler_view_home);
+        sAdapter1 = new SuggestionAdapter(sList1,getApplicationContext(),this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(sAdapter1);
+        s1=new SearchSuggestion();
     }
     public void startWebActivity(){
         Intent intent = new Intent(HomeActivity.this,WebActivity.class);
@@ -87,9 +163,10 @@ public class HomeActivity extends AppCompatActivity {
         regularFontChanger = new FontChanger(regular);
         boldFontChanger = new FontChanger(bold);
         //Changing the font throughout the activity
+        welcomeTV =findViewById(R.id.welcomeTV);
 
         urlET = findViewById(R.id.urlET);
-
+        clockTV = findViewById(R.id.textClock);
     }
 
     public void loadBackgroundImage(){
