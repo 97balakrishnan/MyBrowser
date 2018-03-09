@@ -44,7 +44,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -70,6 +73,7 @@ public class WebActivity extends AppCompatActivity{
     ImageView downloadIV,sendIV;
     WebView webView;
     public static List<Suggestion> sList = new ArrayList<>();
+    public static SuggestionAdapter sAdapter;
     public static String dpath;
     public static Context cont;
     public ArrayList<String> FileList;
@@ -152,6 +156,10 @@ public class WebActivity extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                System.out.println(urlET.getText().toString());
+                String q=urlET.getText().toString();
+                if(!q.startsWith("http://")&&!q.startsWith("https://"))
+                    s.updateSuggestion(q);
 
             }
 
@@ -159,24 +167,26 @@ public class WebActivity extends AppCompatActivity{
             public void afterTextChanged(Editable editable) {
 
 
-                System.out.println(urlET.getText().toString());
-                String q=urlET.getText().toString();
-                if(!q.startsWith("http://"))
-                    s.updateSuggestion(q);
-                sAdapter.notifyDataSetChanged();
+
             }
         });
     }
 
     SearchSuggestion s;
     RecyclerView recyclerView;
-    SuggestionAdapter sAdapter;
-    LinearLayoutManager layoutManager;
+
+    //LinearLayoutManager layoutManager;
+    FlexboxLayoutManager layoutManager;
     public void SearchSuggestionInitiate()
     {
+
+
+         layoutManager = new FlexboxLayoutManager(getApplicationContext());
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
+
         recyclerView = findViewById(R.id.recycler_view);
         sAdapter = new SuggestionAdapter(sList,getApplicationContext());
-        layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(sAdapter);

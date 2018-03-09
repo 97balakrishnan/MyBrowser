@@ -45,11 +45,14 @@ public class SearchSuggestion {
                     try{
                         String temp = response.body().string();
                         System.out.println(temp);
+                        WebActivity.sList.clear();
                         String[] data = temp.replace("[","").replace("]","").split(",");
             //          System.out.println("suggestion data "+data[1]+" "+temp.length());
-                        for(int i=0;i<data.length;i++){
+                        for(int i=0;i<data.length&&i<5;i++){
+                            if(!data[i].startsWith("http://")&&!data[i].startsWith("https://")&&i>0)
                             WebActivity.sList.add(new Suggestion(data[i]));
                         }
+                        WebActivity.sAdapter.notifyDataSetChanged();
                     }
                     catch(Exception e)
                     {

@@ -27,7 +27,12 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         public MyViewHolder(View view) {
             super(view);
             SuggestionName = (TextView) view.findViewById(R.id.SuggestionName);
+            SuggestionName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
+                }
+            });
 
 
         }
