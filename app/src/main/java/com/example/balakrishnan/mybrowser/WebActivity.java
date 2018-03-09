@@ -189,6 +189,10 @@ public class WebActivity extends AppCompatActivity{
                 return true;
             }
         });
+        if(sList!=null && sAdapter!=null) {
+            sList.clear();
+            sAdapter.notifyDataSetChanged();
+        }
     }
 
     SearchSuggestion s;
@@ -200,7 +204,7 @@ public class WebActivity extends AppCompatActivity{
     {
 
 
-         layoutManager = new FlexboxLayoutManager(getApplicationContext());
+        layoutManager = new FlexboxLayoutManager(getApplicationContext());
         layoutManager.setFlexDirection(FlexDirection.ROW_REVERSE);
         layoutManager.setJustifyContent(JustifyContent.FLEX_END);
 

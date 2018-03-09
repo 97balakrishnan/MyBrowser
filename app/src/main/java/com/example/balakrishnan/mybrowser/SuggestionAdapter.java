@@ -24,6 +24,7 @@ import static com.example.balakrishnan.mybrowser.WebActivity.sList;
 /**
  * Created by balakrishnan on 9/3/18.
  */
+
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
 
     private List<Suggestion> SuggestionList;
@@ -77,12 +78,17 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                     intent.putExtra("url","http://google.com/search?q="+name);
                     ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(act, HomeActivity.urlET,HomeActivity.urlET.getTransitionName());
                     act.startActivity(intent,optionsCompat.toBundle());
+                    if(sList!=null && sAdapter!=null) {
+                        sList.clear();
+                        sAdapter.notifyDataSetChanged();
+                    }
                 }
                 else {
                     WebActivity.webView.loadUrl("http://google.com/search?q=" + name);
                     WebActivity.urlET.clearFocus();
                     sList.clear();
                     sAdapter.notifyDataSetChanged();
+
                 }
 
 
