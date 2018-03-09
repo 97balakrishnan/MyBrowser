@@ -8,6 +8,7 @@ public class DownloadLinkChecker {
 
     private String url;
     private String[] aExt;
+
     DownloadLinkChecker(String url,String[] aExt)
     {
         this.url=url;

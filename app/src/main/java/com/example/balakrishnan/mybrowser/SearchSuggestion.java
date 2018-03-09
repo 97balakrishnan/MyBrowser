@@ -23,6 +23,7 @@ import android.support.v4.app.SupportActivity;
 
 public class SearchSuggestion {
 
+    private int NUMBER_OF_SUGGESTIONS=5;
     SearchSuggestion(){}
     public void updateSuggestion(String q)
     {
@@ -48,7 +49,7 @@ public class SearchSuggestion {
                         WebActivity.sList.clear();
                         String[] data = temp.replace("[","").replace("]","").split(",");
             //          System.out.println("suggestion data "+data[1]+" "+temp.length());
-                        for(int i=0;i<data.length&&i<5;i++){
+                        for(int i=0;i<data.length&&i<=(NUMBER_OF_SUGGESTIONS);i++){
                             if(!data[i].startsWith("http://")&&!data[i].startsWith("https://")&&i>0)
                             WebActivity.sList.add(new Suggestion(data[i]));
                         }

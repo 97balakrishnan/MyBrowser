@@ -71,7 +71,7 @@ public class WebActivity extends AppCompatActivity{
     FontChanger regularFontChanger,boldFontChanger;
     EditText urlET;
     ImageView downloadIV,sendIV;
-    WebView webView;
+    public static WebView webView;
     public static List<Suggestion> sList = new ArrayList<>();
     public static SuggestionAdapter sAdapter;
     public static String dpath;
@@ -168,6 +168,14 @@ public class WebActivity extends AppCompatActivity{
 
 
 
+            }
+        });
+        urlET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                String url=urlET.getText().toString().trim();
+                loadURL(url);
+                return false;
             }
         });
     }

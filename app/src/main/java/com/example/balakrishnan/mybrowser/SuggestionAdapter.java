@@ -27,12 +27,6 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         public MyViewHolder(View view) {
             super(view);
             SuggestionName = (TextView) view.findViewById(R.id.SuggestionName);
-            SuggestionName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
 
 
         }
@@ -56,9 +50,18 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
         Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/product_san_regular.ttf");
 
-        String name = SuggestionList.get(position).getData().toString().replace("\"","").trim();
+        final String name = SuggestionList.get(position).getData().toString().replace("\"","").trim();
         holder.SuggestionName.setText(name);
         holder.SuggestionName.setTypeface(font);
+
+        holder.SuggestionName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WebActivity.webView.loadUrl("http://google.com/search?q=" + name);
+
+            }
+        });
+
 
     }
 
