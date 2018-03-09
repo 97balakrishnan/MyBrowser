@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    tools:context="com.example.balakrishnan.mybrowser.AboutActivity">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/backgroundIV"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="20dp"
+                    android:layout_gravity="center">
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bala"
+                        android:id="@+id/profilePicIV1"/>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="-50dp"
+                    android:minHeight="200dp"
+                    app:cardBackgroundColor="@color/transparent_black_percent_50"
+                    android:background="@android:color/transparent"
+                    app:cardCornerRadius="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="65dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:textColor="@android:color/white"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Developed by"
+                            android:textSize="16sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:id="@+id/nameTV"
+                            android:textStyle="bold"
+                            android:layout_marginRight="15dp"
+                            android:layout_gravity="center"
+                            android:textColor="@android:color/white"
+                            android:gravity="center"
+                            android:text="S Balakrishnan"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:paddingRight="20dp"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@android:color/white"
+                            android:drawableLeft="@drawable/android_icon"
+                            android:text="Android Developer"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="14sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:paddingRight="20dp"
+                            android:textColor="@android:color/white"
+                            android:drawableLeft="@drawable/whatsapp_icon"
+                            android:text="9445387900"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:drawableLeft="@drawable/gmail_icon"
+                            android:gravity="center"
+                            android:paddingRight="20dp"
+                            android:text="97balakrishnan@gmail.com"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+
+                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="right"
+                        android:src="@drawable/india"/>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="20dp"
+                    android:layout_gravity="center">
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/shrika"
+                        android:id="@+id/profilePicIV2"/>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    app:cardBackgroundColor="@color/transparent_black_percent_50"
+                    android:background="@android:color/transparent"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="-50dp"
+                    android:minHeight="200dp"
+                    app:cardCornerRadius="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="65dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:textColor="@android:color/white"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Designed by"
+                            android:textSize="16sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:id="@+id/nameTV1"
+                            android:textStyle="bold"
+                            android:layout_marginRight="15dp"
+                            android:layout_gravity="center"
+                            android:textColor="@android:color/white"
+                            android:gravity="center"
+                            android:text="Shrikanth Ravi"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:paddingRight="20dp"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@android:color/white"
+                            android:drawableLeft="@drawable/android_icon"
+                            android:text="Android Developer"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="14sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:paddingRight="20dp"
+                            android:textColor="@android:color/white"
+                            android:drawableLeft="@drawable/whatsapp_icon"
+                            android:text="9840024137"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:drawableLeft="@drawable/gmail_icon"
+                            android:gravity="center"
+                            android:paddingRight="20dp"
+                            android:text="catcalm7698@gmail.com"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+
+                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="right"
+                        android:src="@drawable/india"/>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    app:cardBackgroundColor="@color/transparent_white_percent_85"
+                    android:background="@android:color/transparent"
+
+                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginRight="25dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_margin="10dp"
+                            android:weightSum="1">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="1"
+                                android:textSize="16sp"
+                                android:text="2018 MyBrowser"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginRight="80dp"
+                                android:layout_marginTop="10dp"/>
+                            <ImageView
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:scaleType="centerCrop"
+                                android:layout_weight="1"
+                                android:layout_gravity="right"
+                                android:src="@drawable/android"
+                                android:id="@+id/android"/>
+
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:textColor="@android:color/black"
+                            android:layout_marginBottom="10dp"
+                            android:text="This app uses the following open-source Libraries"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/transparent_black_hex_1"/>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/black"
+                                    android:text="Recyclerview-animators"
+                                    android:drawableLeft="@drawable/android_icon"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/tab_indicator_text"
+                                    android:text="By wasabeef"
+                                    android:layout_marginLeft="22dp"
+                                    />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="22dp"
+                                    android:inputType="textWebEmailAddress"
+                                    android:ellipsize="end"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:text="https://github.com/wasabeef/recyclerview-animators"
+                                    android:textSize="13sp"/>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/transparent_black_hex_1"/>
+
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/black"
+                                    android:text="Picasso - Image Loading"
+                                    android:drawableLeft="@drawable/android_icon"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/tab_indicator_text"
+                                    android:text="By Square"
+                                    android:layout_marginLeft="22dp"
+                                    />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="22dp"
+                                    android:inputType="textWebEmailAddress"
+                                    android:ellipsize="end"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:text="https://github.com/square/picasso"
+                                    android:textSize="13sp"/>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/transparent_black_hex_1"/>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/black"
+                                    android:text="Clearable EditText"
+                                    android:drawableLeft="@drawable/android_icon"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/tab_indicator_text"
+                                    android:text="By Cielsk"
+                                    android:layout_marginLeft="22dp"
+                                    />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="22dp"
+                                    android:inputType="textWebEmailAddress"
+                                    android:ellipsize="end"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:text="https://github.com/Cielsk/clearable-edittext"
+                                    android:textSize="13sp"/>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/transparent_black_hex_1"/>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/black"
+                                    android:text="Material Ripple"
+                                    android:drawableLeft="@drawable/android_icon"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/tab_indicator_text"
+                                    android:text="By balysv"
+                                    android:layout_marginLeft="22dp"
+                                    />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="22dp"
+                                    android:inputType="textWebEmailAddress"
+                                    android:ellipsize="end"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:text="https://github.com/balysv/material-ripple"
+                                    android:textSize="13sp"/>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/transparent_black_hex_1"/>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/black"
+                                    android:text="Chip Cloud"
+                                    android:drawableLeft="@drawable/android_icon"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/tab_indicator_text"
+                                    android:text="By fiskurgit"
+                                    android:layout_marginLeft="22dp"
+                                    />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="22dp"
+                                    android:inputType="textWebEmailAddress"
+                                    android:ellipsize="end"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:text="https://github.com/fiskurgit/ChipCloud"
+                                    android:textSize="13sp"/>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/transparent_black_hex_1"/>
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/black"
+                                    android:text="Retrofit"
+                                    android:drawableLeft="@drawable/android_icon"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:textColor="@android:color/tab_indicator_text"
+                                    android:text="By Square"
+                                    android:layout_marginLeft="22dp"
+                                    />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="22dp"
+                                    android:inputType="textWebEmailAddress"
+                                    android:ellipsize="end"
+                                    android:layout_gravity="center"
+                                    android:gravity="left|center"
+                                    android:text="https://github.com/square/retrofit"
+                                    android:textSize="13sp"/>
+                            </LinearLayout>
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</RelativeLayout>

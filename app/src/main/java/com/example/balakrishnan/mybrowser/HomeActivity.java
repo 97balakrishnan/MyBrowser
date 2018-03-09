@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
@@ -44,6 +45,8 @@ public class HomeActivity extends AppCompatActivity {
     public static EditText urlET;
     TextView welcomeTV;
     TextView clockTV;
+    MaterialRippleLayout settingsMRL,downloadMRL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +126,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        settingsMRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this,AboutActivity.class));
+            }
+        });
+
+        downloadMRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
     SearchSuggestion s1=new SearchSuggestion();
     RecyclerView recyclerView;
@@ -167,6 +184,9 @@ public class HomeActivity extends AppCompatActivity {
 
         urlET = findViewById(R.id.urlET);
         clockTV = findViewById(R.id.textClock);
+        settingsMRL = findViewById(R.id.settingsMRL);
+        downloadMRL = findViewById(R.id.downloadMRL);
+
     }
 
     public void loadBackgroundImage(){
