@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,8 +62,15 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
             @Override
             public void onClick(View view) {
                 WebActivity.webView.loadUrl("http://google.com/search?q=" + name);
+                WebActivity.urlET.clearFocus();
                 sList.clear();
                 sAdapter.notifyDataSetChanged();
+
+
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
             }
         });
 

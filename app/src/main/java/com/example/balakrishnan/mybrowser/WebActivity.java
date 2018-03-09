@@ -31,6 +31,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -69,8 +70,8 @@ public class WebActivity extends AppCompatActivity{
 
     Typeface regular,bold;
     FontChanger regularFontChanger,boldFontChanger;
-    EditText urlET;
     ImageView downloadIV,sendIV;
+    public static EditText urlET;
     public static WebView webView;
     public static List<Suggestion> sList = new ArrayList<>();
     public static SuggestionAdapter sAdapter;
@@ -96,13 +97,7 @@ public class WebActivity extends AppCompatActivity{
         urlET.setText(getIntent().getStringExtra("url"));
         loadURL(getIntent().getStringExtra("url"));
 
-        urlET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                urlET.setSelectAllOnFocus(true);
-
-            }
-        });
+        urlET.setSelectAllOnFocus(true);
 
         urlET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -131,6 +126,9 @@ public class WebActivity extends AppCompatActivity{
 
                 String url=urlET.getText().toString().trim();
                 loadURL(url);
+                sList.clear();
+                sAdapter.notifyDataSetChanged();
+                urlET.clearFocus();
 
             }
         });
@@ -166,7 +164,11 @@ public class WebActivity extends AppCompatActivity{
             @Override
             public void afterTextChanged(Editable editable) {
 
-
+                if(urlET.length()==0)
+                {
+                    sList.clear();
+                    sAdapter.notifyDataSetChanged();
+                }
 
             }
         });
@@ -175,7 +177,11 @@ public class WebActivity extends AppCompatActivity{
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 String url=urlET.getText().toString().trim();
                 loadURL(url);
-                return false;
+
+                sList.clear();
+                sAdapter.notifyDataSetChanged();
+                urlET.clearFocus();
+                return true;
             }
         });
     }
@@ -190,8 +196,8 @@ public class WebActivity extends AppCompatActivity{
 
 
          layoutManager = new FlexboxLayoutManager(getApplicationContext());
-        layoutManager.setFlexDirection(FlexDirection.ROW);
-        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
+        layoutManager.setFlexDirection(FlexDirection.ROW_REVERSE);
+        layoutManager.setJustifyContent(JustifyContent.FLEX_END);
 
         recyclerView = findViewById(R.id.recycler_view);
         sAdapter = new SuggestionAdapter(sList,getApplicationContext());
