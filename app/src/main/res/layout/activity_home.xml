@@ -13,6 +13,23 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:id="@+id/backgroundIV"/>
+        <com.narayanacharya.waveview.WaveView
+            android:id="@+id/waveView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:waveAmplitude="10.25"
+            android:layout_alignParentBottom="true"
+            app:waveBackgroundColor="@android:color/transparent"
+            app:waveColor="@color/colorAccent"
+            app:waveDensity="5.0"
+            app:waveFrequency="2.0"
+            app:waveNumberOfWaves="5"
+            app:wavePhaseShift="-0.05"
+            app:wavePrimaryLineWidth="3.0"
+            app:waveSecondaryLineWidth="1.0"
+            app:waveXAxisPositionMultiplier="0.5" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +61,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/more"
+                            android:src="@android:drawable/ic_dialog_info"
                             android:tint="@android:color/white"/>
                 </com.balysv.materialripple.MaterialRippleLayout>
 
@@ -156,5 +173,5 @@
                             android:tint="@android:color/white"/>
                 </com.balysv.materialripple.MaterialRippleLayout>
         </RelativeLayout>
-        
+
 </RelativeLayout>
