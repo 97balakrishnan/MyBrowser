@@ -63,6 +63,9 @@ import java.util.List;
 import fisk.chipcloud.ChipCloud;
 import fisk.chipcloud.ChipCloudConfig;
 import fisk.chipcloud.ChipListener;
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+
+import static com.example.balakrishnan.mybrowser.MainActivity.adapter;
 
 public class WebActivity extends AppCompatActivity{
 
@@ -127,9 +130,8 @@ public class WebActivity extends AppCompatActivity{
                 String url=urlET.getText().toString().trim();
                 loadURL(url);
                 sList.clear();
-                sAdapter.notifyDataSetChanged();
                 urlET.clearFocus();
-
+                sAdapter.notifyDataSetChanged();
             }
         });
 
@@ -202,8 +204,11 @@ public class WebActivity extends AppCompatActivity{
         recyclerView = findViewById(R.id.recycler_view);
         sAdapter = new SuggestionAdapter(sList,getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(sAdapter);
+
+
+        AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(sAdapter);
+        alphaAdapter.setFirstOnly(false);
+        recyclerView.setAdapter(alphaAdapter);
         s=new SearchSuggestion();
     }
     public void init(){

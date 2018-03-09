@@ -66,7 +66,6 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 sList.clear();
                 sAdapter.notifyDataSetChanged();
 
-
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
