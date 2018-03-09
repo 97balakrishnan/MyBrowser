@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static com.example.balakrishnan.mybrowser.WebActivity.sAdapter;
+import static com.example.balakrishnan.mybrowser.WebActivity.sList;
+
 /**
  * Created by balakrishnan on 9/3/18.
  */
@@ -58,7 +61,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
             @Override
             public void onClick(View view) {
                 WebActivity.webView.loadUrl("http://google.com/search?q=" + name);
-
+                sList.clear();
+                sAdapter.notifyDataSetChanged();
             }
         });
 
